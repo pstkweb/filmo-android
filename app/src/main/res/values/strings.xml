@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">Filmo</string>
+    <string name="app_name">Movies lib</string>
+    <string name="add">Add a movie</string>
+    <string name="scan">Scan a barcode</string>
+    <string name="search">Search a movie by title</string>
     <string name="resume">Resume</string>
     <string name="pause">Pause</string>
     <string name="barcode_preview">Barcode preview</string>

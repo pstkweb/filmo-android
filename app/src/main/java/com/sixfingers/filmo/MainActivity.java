@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
         barcodeView.decodeContinuous(barcodeCB);
 
-        new SearchBatmanTask().execute();
+        new SearchBatmanTask().execute("Batman");
     }
 
     @Override
@@ -85,7 +85,11 @@ public class MainActivity extends AppCompatActivity {
             if (result.getContents() == null) {
                 Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(MainActivity.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                Toast.makeText(
+                        MainActivity.this,
+                        "Scanned: " + result.getContents(),
+                        Toast.LENGTH_LONG
+                ).show();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -106,14 +110,26 @@ public class MainActivity extends AppCompatActivity {
     public void resume(View v) {
         barcodeView.resume();
     }
-
-    public void afficherRes(SearchResult res) {
-        Toast.makeText(MainActivity.this, res.toString(), Toast.LENGTH_LONG).show();
+    
+    public void scan(View v) {
+        Toast.makeText(MainActivity.this, "Request a scan", Toast.LENGTH_SHORT).show();
+    }
+    
+    public void search(View v) {
+        Toast.makeText(MainActivity.this, "Search by title", Toast.LENGTH_SHORT).show();
     }
 
-    class SearchBatmanTask extends AsyncTask<Void, Void, SearchResult>{
+    public void afficherRes(SearchResult res) {
+        Toast.makeText(
+                MainActivity.this,
+                (res == null ? "Aucun résultat" : res.toString()),
+                Toast.LENGTH_LONG
+        ).show();
+    }
+
+    class SearchBatmanTask extends AsyncTask<String, Void, SearchResult>{
         @Override
-        protected SearchResult doInBackground(Void... params) {
+        protected SearchResult doInBackground(String... params) {
             DVDFrService service = new Retrofit.Builder()
                     .baseUrl(DVDFrService.ENDPOINT)
                     .addConverterFactory(SimpleXmlConverterFactory.create())
@@ -121,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                     .create(DVDFrService.class);
 
             try {
-                return service.searchByTitle("Batman", SupportType.ALL).execute().body();
+                return service.searchByTitle(params[0], SupportType.ALL).execute().body();
             } catch (IOException e) {
                 e.printStackTrace();
             }

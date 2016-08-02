@@ -11,8 +11,14 @@ public interface DVDFrService {
     String ENDPOINT = "http://www.dvdfr.com/api/";
 
     @GET("search.php")
-    Call<SearchResult> searchByGencode(@Query("gencode") String barcode, @Query("produit") SupportType type);
+    Call<SearchResult> searchByGencode(
+            @Query("gencode") String barcode,
+            @Query("produit") SupportType type
+    );
 
     @GET("search.php")
-    Call<SearchResult> searchByTitle(@Query("title") String title, @Query("produit") SupportType type);
+    Call<SearchResult> searchByTitle(
+            @Query("title") String title,
+            @Query("produit") SupportType type
+    );
 }
