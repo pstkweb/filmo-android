@@ -2,6 +2,7 @@ package com.sixfingers.filmo;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,8 +17,16 @@ import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.sixfingers.filmo.dvdfrapi.DVDFrService;
+import com.sixfingers.filmo.dvdfrapi.models.SearchResult;
+import com.sixfingers.filmo.dvdfrapi.models.SupportType;
 
+import java.io.IOException;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     private DecoratedBarcodeView barcodeView;
@@ -45,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
         barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
         barcodeView.decodeContinuous(barcodeCB);
+
+        new SearchBatmanTask().execute();
     }
 
     @Override
@@ -94,5 +105,35 @@ public class MainActivity extends AppCompatActivity {
 
     public void resume(View v) {
         barcodeView.resume();
+    }
+
+    public void afficherRes(SearchResult res) {
+        Toast.makeText(MainActivity.this, res.toString(), Toast.LENGTH_LONG).show();
+    }
+
+    class SearchBatmanTask extends AsyncTask<Void, Void, SearchResult>{
+        @Override
+        protected SearchResult doInBackground(Void... params) {
+            DVDFrService service = new Retrofit.Builder()
+                    .baseUrl(DVDFrService.ENDPOINT)
+                    .addConverterFactory(SimpleXmlConverterFactory.create())
+                    .build()
+                    .create(DVDFrService.class);
+
+            try {
+                return service.searchByTitle("Batman", SupportType.ALL).execute().body();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(SearchResult searchResult) {
+            super.onPostExecute(searchResult);
+
+            afficherRes(searchResult);
+        }
     }
 }
