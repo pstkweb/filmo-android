@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FloatingActionMenu">
+        <attr name="direction" format="enum">
+            <enum name="top" value="0" />
+            <enum name="end" value="1" />
+            <enum name="bottom" value="2" />
+            <enum name="start" value="3" />
+        </attr>
+        <attr name="main_icon" format="integer" />
+    </declare-styleable>
+</resources>
