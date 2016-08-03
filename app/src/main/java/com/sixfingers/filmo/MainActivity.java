@@ -56,14 +56,14 @@ public class MainActivity extends AppCompatActivity {
         barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
         barcodeView.decodeContinuous(barcodeCB);
 
-        fab_menu = (FloatingActionButton) findViewById(R.id.fab_menu);
+        /*fab_menu = (FloatingActionButton) findViewById(R.id.fab_menu);
         fab_item1 = (FloatingActionButton) findViewById(R.id.fab_menu_item1);
         fab_item2 = (FloatingActionButton) findViewById(R.id.fab_menu_item2);
 
         fabMenuOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_forward);
         fabMenuClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_backward);
         fabMenuItemOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_item_open);
-        fabMenuItemClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_item_close);
+        fabMenuItemClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_item_close);*/
 
         new SearchBatmanTask().execute("Batman");
     }

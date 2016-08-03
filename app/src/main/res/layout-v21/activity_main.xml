@@ -51,20 +51,29 @@
         android:id="@+id/barcodePreview"
         android:contentDescription="@string/barcode_preview" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:background="@color/colorAccent"
+        app:fabSize="normal"
+        app:useCompatPadding="true"
+        android:src="@drawable/ic_add_white_48dp" />
+
     <com.sixfingers.ui.floatingactionmenu.FloatingActionMenu
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:icon="@drawable/ic_add_white_48dp">
+        app:main_icon="@drawable/ic_add_white_48dp"
+        app:direction="top"
+        android:layout_gravity="bottom|end">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_menu_item22"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:clickable="false"
-            android:visibility="invisible"
-            android:layout_marginBottom="10dp"
-            app:fabSize="mini"
             app:backgroundTint="@color/colorAccent"
             android:src="@drawable/ic_photo_camera_white_48dp" />
 
@@ -72,60 +81,9 @@
             android:id="@+id/fab_menu_item21"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:clickable="false"
-            android:visibility="invisible"
-            android:layout_marginBottom="10dp"
             app:backgroundTint="@color/colorAccent"
-            app:fabSize="mini"
             android:src="@drawable/ic_search_white_48dp" />
 
     </com.sixfingers.ui.floatingactionmenu.FloatingActionMenu>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="end|bottom">
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_menu_item2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:clickable="false"
-            android:visibility="invisible"
-            android:layout_marginBottom="10dp"
-            app:fabSize="mini"
-            app:backgroundTint="@color/colorAccent"
-            android:src="@drawable/ic_photo_camera_white_48dp" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_menu_item1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:clickable="false"
-            android:visibility="invisible"
-            android:layout_marginBottom="10dp"
-            app:backgroundTint="@color/colorAccent"
-            app:fabSize="mini"
-            android:src="@drawable/ic_search_white_48dp" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:layout_marginBottom="16dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="0dp"
-            app:backgroundTint="@color/colorAccent"
-            app:fabSize="normal"
-            android:src="@drawable/ic_add_white_48dp"
-            android:onClick="FABmenu"/>
-
-    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

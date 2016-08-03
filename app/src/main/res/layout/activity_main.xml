@@ -67,32 +67,27 @@
         app:useCompatPadding="true"
         android:src="@drawable/ic_add_white_48dp" />
 
-    <com.github.clans.fab.FloatingActionMenu
+    <com.sixfingers.ui.floatingactionmenu.FloatingActionMenu
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        app:menu_icon="@drawable/ic_add_white_48dp"
-        app:menu_colorNormal="@color/colorAccent">
+        app:main_icon="@drawable/ic_add_white_48dp"
+        app:direction="top"
+        android:layout_gravity="bottom|end">
 
-        <com.github.clans.fab.FloatingActionButton
-            android:src="@drawable/ic_photo_camera_white_24dp"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_menu_item22"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_size="mini"
-            app:fab_label="@string/scan"
-            app:fab_colorNormal="@color/colorAccent"
-            android:onClick="scan" />
+            app:backgroundTint="@color/colorAccent"
+            android:src="@drawable/ic_photo_camera_white_48dp" />
 
-        <com.github.clans.fab.FloatingActionButton
-            android:src="@drawable/ic_search_white_24dp"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_menu_item21"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_size="mini"
-            app:fab_label="@string/search"
-            app:fab_colorNormal="@color/colorAccent"
-            android:onClick="search" />
+            app:backgroundTint="@color/colorAccent"
+            android:src="@drawable/ic_search_white_48dp" />
 
-    </com.github.clans.fab.FloatingActionMenu>
+    </com.sixfingers.ui.floatingactionmenu.FloatingActionMenu>
 
 </android.support.design.widget.CoordinatorLayout>
