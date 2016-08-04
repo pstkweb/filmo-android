@@ -7,61 +7,11 @@
     android:layout_width="match_parent"
     tools:context="com.sixfingers.filmo.MainActivity">
 
-    <com.journeyapps.barcodescanner.DecoratedBarcodeView
-        android:id="@+id/barcode_scanner"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/cards_recycler"
+        android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_above="@+id/buttonsLayout"
-        android:layout_gravity="top" />
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/buttonsLayout"
-        android:layout_toStartOf="@+id/centerHorizont">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/pause"
-            android:onClick="pause" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/resume"
-            android:onClick="resume" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/centerHorizont" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/centerHorizont"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@id/buttonsLayout"
-        android:id="@+id/barcodePreview"
-        android:contentDescription="@string/barcode_preview" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="100dp"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:background="@color/colorAccent"
-        app:fabSize="normal"
-        app:useCompatPadding="true"
-        android:src="@drawable/ic_add_white_48dp" />
+        android:layout_height="match_parent" />
 
     <com.sixfingers.ui.floatingactionmenu.FloatingActionMenu
         android:layout_width="wrap_content"

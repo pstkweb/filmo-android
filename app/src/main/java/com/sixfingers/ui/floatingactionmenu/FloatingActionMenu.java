@@ -70,10 +70,10 @@ public class FloatingActionMenu extends LinearLayout {
             public void onClick(View view) {
                 isOpen = !isOpen;
 
-                mainButton.startAnimation(isOpen ? menuClose : menuOpen);
+                mainButton.startAnimation(isOpen ? menuOpen : menuClose);
                 if (items != null) {
                     for (FloatingActionButton item : items) {
-                        item.startAnimation(isOpen ? itemClose : itemOpen);
+                        item.startAnimation(isOpen ? itemOpen : itemClose);
                         item.setClickable(isOpen);
                     }
                 }
