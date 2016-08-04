@@ -7,6 +7,25 @@
     android:layout_width="match_parent"
     tools:context="com.sixfingers.filmo.MainActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="128dp"
+        android:minHeight="?android:attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:gravity="bottom"
+        android:theme="@style/ExpandedToolbarTheme">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/menu_title"
+            android:textColor="@android:color/white"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_gravity="start|center_vertical" />
+
+    </android.support.v7.widget.Toolbar>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/cards_recycler"
         android:scrollbars="vertical"
@@ -14,11 +33,13 @@
         android:layout_height="match_parent" />
 
     <com.sixfingers.ui.floatingactionmenu.FloatingActionMenu
+        android:id="@+id/FAM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:main_icon="@drawable/ic_add_white_48dp"
-        app:direction="top"
-        android:layout_gravity="bottom|end">
+        app:direction="end"
+        app:layout_anchor="@id/toolbar"
+        app:layout_anchorGravity="start|bottom">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_menu_item22"

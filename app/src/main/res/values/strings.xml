@@ -8,4 +8,6 @@
     <string name="barcode_preview">Barcode preview</string>
     <string name="movie_image">Movie poster</string>
     <string name="add_whishlist">Add to wishlist</string>
+    <string name="search_menu">Search</string>
+    <string name="menu_title">Collected</string>
 </resources>
