@@ -18,14 +18,14 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MoviesCardAdapter extends RecyclerView.Adapter<MoviesCardAdapter.MovieCardViewHolder> {
+public class MoviesGridItemAdapter extends RecyclerView.Adapter<MoviesGridItemAdapter.MovieGridItemViewHolder> {
     private ArrayList<Movie> data;
 
-    public static class MovieCardViewHolder extends RecyclerView.ViewHolder {
+    public static class MovieGridItemViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
         public ImageView image;
 
-        public MovieCardViewHolder(View itemView) {
+        public MovieGridItemViewHolder(View itemView) {
             super(itemView);
 
             title = (TextView) itemView.findViewById(R.id.movie_title);
@@ -61,7 +61,7 @@ public class MoviesCardAdapter extends RecyclerView.Adapter<MoviesCardAdapter.Mo
         }
     }
 
-    public MoviesCardAdapter(ArrayList<Movie> dataSet) {
+    public MoviesGridItemAdapter(ArrayList<Movie> dataSet) {
         data = dataSet;
     }
 
@@ -76,18 +76,18 @@ public class MoviesCardAdapter extends RecyclerView.Adapter<MoviesCardAdapter.Mo
     }
 
     @Override
-    public MovieCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MovieGridItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.movie_card,
+                R.layout.movie_grid_item,
                 parent,
                 false
         );
 
-        return new MovieCardViewHolder(v);
+        return new MovieGridItemViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(MovieCardViewHolder holder, int position) {
+    public void onBindViewHolder(MovieGridItemViewHolder holder, int position) {
         holder.title.setText(data.get(position).getTitre());
         new DownloadImageTask(holder.image).execute(data.get(position).getCover());
     }

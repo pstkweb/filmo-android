@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/Filmo.iml" filepath="$PROJECT_DIR$/Filmo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/filmo-android.iml" filepath="$PROJECT_DIR$/filmo-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ormliteutils/ormliteutils.iml" filepath="$PROJECT_DIR$/ormliteutils/ormliteutils.iml" />
     </modules>
   </component>
 </project>

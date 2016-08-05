@@ -1,19 +1,35 @@
 package com.sixfingers.filmo.model;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "movie")
 public class Movie {
-    private int id;
+    @DatabaseField(id = true)
+    private Long id;
+    @DatabaseField
     private String media;
+    @DatabaseField
     private String cover;
+    @DatabaseField
     private String titre;
+    @DatabaseField
     private String titreVO;
+    @DatabaseField
     private String titreAlt;
+    @DatabaseField
     private String titreVOAlt;
+    @DatabaseField
     private int annee;
+    @DatabaseField
     private String editeur;
+    @DatabaseField
     private String edition;
 
+    public Movie() {}
+
     public Movie(
-            int id, String media, String cover, String titre, String titreVO, String titreAlt,
+            Long id, String media, String cover, String titre, String titreVO, String titreAlt,
             String titreVOAlt, int annee, String editeur, String edition
     ) {
         this.id = id;
@@ -28,11 +44,11 @@ public class Movie {
         this.edition = edition;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -3,7 +3,9 @@ package com.sixfingers.ui.floatingactionmenu;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.graphics.Rect;
 import android.os.Build;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
@@ -27,7 +29,7 @@ public class FloatingActionMenu extends LinearLayout {
     private Direction direction;
     private FloatingActionButton mainButton;
     private ArrayList<FloatingActionButton> items = new ArrayList<>();
-    private Animation menuOpen, menuClose, itemOpen, itemClose;
+    private Animation menuOpen, menuClose, itemOpen, itemClose, menuHide, menuShow;
 
     public FloatingActionMenu(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -37,6 +39,14 @@ public class FloatingActionMenu extends LinearLayout {
         int mainIcon = a.getResourceId(
                 R.styleable.FloatingActionMenu_main_icon,
                 R.drawable.ic_add_white_48dp
+        );
+        int hideAnim = a.getResourceId(
+                R.styleable.FloatingActionMenu_hide_anim,
+                0
+        );
+        int showAnim = a.getResourceId(
+                R.styleable.FloatingActionMenu_show_anim,
+                0
         );
 
         int mainColor = a.getColor(
@@ -51,6 +61,12 @@ public class FloatingActionMenu extends LinearLayout {
         menuClose = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_backward);
         itemOpen = AnimationUtils.loadAnimation(getContext(), R.anim.fab_item_open);
         itemClose = AnimationUtils.loadAnimation(getContext(), R.anim.fab_item_close);
+        if (hideAnim != 0) {
+            menuHide = AnimationUtils.loadAnimation(getContext(), hideAnim);
+        }
+        if (showAnim != 0) {
+            menuShow = AnimationUtils.loadAnimation(getContext(), showAnim);
+        }
 
         setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -130,6 +146,22 @@ public class FloatingActionMenu extends LinearLayout {
         this(context, null);
     }
 
+    public void hide() {
+        if (getVisibility() == VISIBLE && menuHide != null) {
+            startAnimation(menuHide);
+
+            setVisibility(INVISIBLE);
+        }
+    }
+
+    public void show() {
+        if (getVisibility() == INVISIBLE && menuShow != null) {
+            startAnimation(menuShow);
+
+            setVisibility(VISIBLE);
+        }
+    }
+
     @Override
     public void onViewAdded(View child) {
         FloatingActionButton item = (FloatingActionButton) child;
@@ -157,6 +189,41 @@ public class FloatingActionMenu extends LinearLayout {
             item.setLayoutParams(params);
 
             items.add(item);
+        }
+    }
+
+    public static class ScrollAwareFAMBehavior extends CoordinatorLayout.Behavior<FloatingActionMenu> {
+        private int topOffset;
+
+        public ScrollAwareFAMBehavior() {
+            super();
+        }
+
+        public ScrollAwareFAMBehavior(Context context, AttributeSet attrs) {
+            super(context, attrs);
+
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FloatingActionMenuBehavior);
+            topOffset = a.getDimensionPixelSize(R.styleable.FloatingActionMenuBehavior_top_offset, 0);
+            a.recycle();
+        }
+
+        @Override
+        public boolean layoutDependsOn(CoordinatorLayout parent, FloatingActionMenu child, View dependency) {
+            return dependency instanceof AppBarLayout;
+        }
+
+        @Override
+        public boolean onDependentViewChanged(CoordinatorLayout parent, FloatingActionMenu child, View dependency) {
+            Rect rect = new Rect();
+            dependency.getLocalVisibleRect(rect);
+
+            if (rect.top <= topOffset && child.getVisibility() == View.INVISIBLE) {
+                child.show();
+            } else if (rect.top > topOffset && child.getVisibility() == View.VISIBLE) {
+                child.hide();
+            }
+
+            return super.onDependentViewChanged(parent, child, dependency);
         }
     }
 }

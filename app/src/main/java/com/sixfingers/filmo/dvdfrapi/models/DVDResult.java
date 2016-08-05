@@ -110,7 +110,7 @@ public class DVDResult {
 
     public Movie toMovie() {
         return new Movie(
-                id,
+                (long) id,
                 media,
                 cover,
                 titre,

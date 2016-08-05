@@ -3,29 +3,34 @@ package com.sixfingers.filmo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
-import android.view.View;
 
-import com.sixfingers.filmo.adapter.MoviesCardAdapter;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
+import com.sixfingers.filmo.adapter.MoviesGridItemAdapter;
+import com.sixfingers.filmo.decoration.GridSpacingDecoration;
 import com.sixfingers.filmo.dvdfrapi.DVDFrService;
 import com.sixfingers.filmo.dvdfrapi.models.DVDResult;
 import com.sixfingers.filmo.dvdfrapi.models.SearchResult;
 import com.sixfingers.filmo.dvdfrapi.models.SupportType;
+import com.sixfingers.filmo.helper.MovieDatabaseHelper;
 import com.sixfingers.filmo.model.Movie;
-import com.sixfingers.ui.floatingactionmenu.FloatingActionMenu;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
-    private MoviesCardAdapter cardsListAdapter;
-    private FloatingActionMenu appFAM;
+    private MoviesGridItemAdapter gridListAdapter;
+    private MovieDatabaseHelper dbHelper;
 
     private class SearchTask extends AsyncTask<String, Void, SearchResult> {
         @Override
@@ -49,13 +54,27 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(SearchResult searchResult) {
             super.onPostExecute(searchResult);
 
-            afficherCards(searchResult);
+            try {
+                Dao<Movie, Long> movieDao = dbHelper.getDao();
+                for (DVDResult dvd : searchResult.getDVDs()) {
+                    movieDao.create(dvd.toMovie());
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            afficherCards();
         }
     }
 
-    public void afficherCards(SearchResult result) {
-        for (DVDResult dvd : result.getDVDs()) {
-            cardsListAdapter.addItem(dvd.toMovie(), cardsListAdapter.getItemCount());
+    public void afficherCards() {
+        try {
+            Dao<Movie, Long> movieDao = dbHelper.getDao();
+            for (Movie movie : movieDao.queryForAll()) {
+                gridListAdapter.addItem(movie, gridListAdapter.getItemCount());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -64,36 +83,39 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setTitle(getResources().getString(R.string.menu_title));
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        appFAM = (FloatingActionMenu) findViewById(R.id.FAM);
-
-        RecyclerView cardsList = (RecyclerView) findViewById(R.id.cards_recycler);
-        cardsList.setHasFixedSize(true);
-        cardsList.setLayoutManager(
-                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        RecyclerView gridList = (RecyclerView) findViewById(R.id.grid_recycler);
+        gridList.setHasFixedSize(true);
+        gridList.setLayoutManager(new GridLayoutManager(this, 2));
+        gridList.addItemDecoration(
+                new GridSpacingDecoration(
+                        2,
+                        getResources().getDimensionPixelSize(R.dimen.grid_spacing),
+                        true,
+                        0
+                )
         );
 
-        cardsListAdapter = new MoviesCardAdapter(new ArrayList<Movie>());
-        cardsListAdapter.setHasStableIds(true);
-        cardsList.setAdapter(cardsListAdapter);
+        gridListAdapter = new MoviesGridItemAdapter(new ArrayList<Movie>());
+        gridListAdapter.setHasStableIds(true);
+        gridList.setAdapter(gridListAdapter);
 
-        cardsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+        dbHelper = OpenHelperManager.getHelper(this, MovieDatabaseHelper.class);
 
-                if (dy > 0) {
-                    // show FAM
+        try {
+            List<Movie> movies = dbHelper.getDao().queryForAll();
 
-                } else {
-                    // hide FAM
-                }
+            if (movies.size() == 0) {
+                new SearchTask().execute("Batman");
+            } else {
+                Log.d("TEST", "Get from DB");
+                afficherCards();
             }
-        });
-
-        //new SearchTask().execute("Batman");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

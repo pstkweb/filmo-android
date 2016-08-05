@@ -10,4 +10,11 @@
     <dimen name="card_primary_text_end_padding">16dp</dimen>
 
     <dimen name="card_actions_padding">8dp</dimen>
+
+    <dimen name="grid_item_single_line_height">48dp</dimen>
+    <dimen name="grid_item_single_line_text_margin">16dp</dimen>
+    <dimen name="grid_item_single_line_text_icon_side_margin">4dp</dimen>
+    <dimen name="grid_item_single_line_text_size">16sp</dimen>
+    <dimen name="grid_item_single_line_icon_margin">12dp</dimen>
+    <dimen name="grid_spacing">4dp</dimen>
 </resources>

@@ -1,0 +1,41 @@
+#
+# generated on 2016/08/05 06:44:21
+#
+# --table-start--
+dataClass=com.sixfingers.filmo.model.Movie
+tableName=movie
+# --table-fields-start--
+# --field-start--
+fieldName=id
+id=true
+# --field-end--
+# --field-start--
+fieldName=media
+# --field-end--
+# --field-start--
+fieldName=cover
+# --field-end--
+# --field-start--
+fieldName=titre
+# --field-end--
+# --field-start--
+fieldName=titreVO
+# --field-end--
+# --field-start--
+fieldName=titreAlt
+# --field-end--
+# --field-start--
+fieldName=titreVOAlt
+# --field-end--
+# --field-start--
+fieldName=annee
+# --field-end--
+# --field-start--
+fieldName=editeur
+# --field-end--
+# --field-start--
+fieldName=edition
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
