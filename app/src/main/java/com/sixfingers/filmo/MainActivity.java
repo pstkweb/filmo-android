@@ -1,7 +1,6 @@
 package com.sixfingers.filmo;
 
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 
-import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.sixfingers.filmo.adapter.MoviesGridItemAdapter;
 import com.sixfingers.filmo.decoration.GridSpacingDecoration;
@@ -17,8 +15,11 @@ import com.sixfingers.filmo.dvdfrapi.DVDFrService;
 import com.sixfingers.filmo.dvdfrapi.models.DVDResult;
 import com.sixfingers.filmo.dvdfrapi.models.SearchResult;
 import com.sixfingers.filmo.dvdfrapi.models.SupportType;
-import com.sixfingers.filmo.helper.MovieDatabaseHelper;
+import com.sixfingers.filmo.helper.MoviesDatabaseHelper;
+import com.sixfingers.filmo.model.Collection;
 import com.sixfingers.filmo.model.Movie;
+import com.sixfingers.filmo.ormlite.OrmLiteAppCompatActivity;
+import com.sixfingers.filmo.ormlite.QueriesRepository;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -28,9 +29,8 @@ import java.util.List;
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends OrmLiteAppCompatActivity<MoviesDatabaseHelper> {
     private MoviesGridItemAdapter gridListAdapter;
-    private MovieDatabaseHelper dbHelper;
 
     private class SearchTask extends AsyncTask<String, Void, SearchResult> {
         @Override
@@ -55,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(searchResult);
 
             try {
-                Dao<Movie, Long> movieDao = dbHelper.getDao();
+                Dao<Movie, Long> movieDao = getHelper().getMovieDao();
+                Log.d("TEST", "API Count: " + searchResult.getDVDs().size());
                 for (DVDResult dvd : searchResult.getDVDs()) {
                     movieDao.create(dvd.toMovie());
                 }
@@ -63,18 +64,25 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            afficherCards();
+            displayGridItems();
         }
     }
 
-    public void afficherCards() {
+    public void displayGridItems() {
         try {
-            Dao<Movie, Long> movieDao = dbHelper.getDao();
-            for (Movie movie : movieDao.queryForAll()) {
-                gridListAdapter.addItem(movie, gridListAdapter.getItemCount());
-            }
+            QueriesRepository queriesRepository = new QueriesRepository(this);
+
+            displayGridItems(queriesRepository.getMoviesForCollection(
+                    queriesRepository.getCollectionByName(Collection.COLLECTED)
+            ));
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void displayGridItems(java.util.Collection<Movie> movies) {
+        for (Movie movie : movies) {
+            gridListAdapter.addItem(movie, gridListAdapter.getItemCount());
         }
     }
 
@@ -102,16 +110,15 @@ public class MainActivity extends AppCompatActivity {
         gridListAdapter.setHasStableIds(true);
         gridList.setAdapter(gridListAdapter);
 
-        dbHelper = OpenHelperManager.getHelper(this, MovieDatabaseHelper.class);
-
         try {
-            List<Movie> movies = dbHelper.getDao().queryForAll();
-
+            QueriesRepository qRepository = new QueriesRepository(this);
+            List<Movie> movies = qRepository.getMoviesForCollection(
+                    qRepository.getCollectionByName(Collection.COLLECTED)
+            );
             if (movies.size() == 0) {
                 new SearchTask().execute("Batman");
             } else {
-                Log.d("TEST", "Get from DB");
-                afficherCards();
+                this.displayGridItems(movies);
             }
         } catch (SQLException e) {
             e.printStackTrace();

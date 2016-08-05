@@ -1,5 +1,5 @@
 #
-# generated on 2016/08/05 06:44:21
+# generated on 2016/08/06 12:55:13
 #
 # --table-start--
 dataClass=com.sixfingers.filmo.model.Movie
@@ -7,16 +7,20 @@ tableName=movie
 # --table-fields-start--
 # --field-start--
 fieldName=id
+columnName=id
 id=true
 # --field-end--
 # --field-start--
 fieldName=media
+columnName=media
 # --field-end--
 # --field-start--
 fieldName=cover
+columnName=cover
 # --field-end--
 # --field-start--
 fieldName=titre
+columnName=titre
 # --field-end--
 # --field-start--
 fieldName=titreVO
@@ -29,12 +33,56 @@ fieldName=titreVOAlt
 # --field-end--
 # --field-start--
 fieldName=annee
+columnName=annee
 # --field-end--
 # --field-start--
 fieldName=editeur
+columnName=editeur
 # --field-end--
 # --field-start--
 fieldName=edition
+columnName=edition
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.sixfingers.filmo.model.Collection
+tableName=collection
+# --table-fields-start--
+# --field-start--
+fieldName=id
+columnName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=name
+columnName=name
+unique=true
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.sixfingers.filmo.model.CollectionMovie
+tableName=collection_movies
+# --table-fields-start--
+# --field-start--
+fieldName=id
+columnName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=collection
+columnName=collection_id
+foreign=true
+uniqueCombo=true
+# --field-end--
+# --field-start--
+fieldName=movie
+columnName=movie_id
+foreign=true
+uniqueCombo=true
 # --field-end--
 # --table-fields-end--
 # --table-end--
