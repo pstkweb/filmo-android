@@ -1,9 +1,6 @@
 package com.sixfingers.filmo.adapter;
 
-import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,17 +10,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sixfingers.filmo.R;
-import com.sixfingers.filmo.model.Movie;
+import com.sixfingers.filmo.helper.MoviesDatabaseHelper;
+import com.sixfingers.filmo.model.CollectionMovie;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MoviesGridItemAdapter extends RecyclerView.Adapter<MoviesGridItemAdapter.MovieGridItemViewHolder> {
-    private ArrayList<Movie> data;
+    private ArrayList<CollectionMovie> data;
+    private MoviesDatabaseHelper helper;
 
     public static class MovieGridItemViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
@@ -39,55 +37,26 @@ public class MoviesGridItemAdapter extends RecyclerView.Adapter<MoviesGridItemAd
         }
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView view;
-        Context context;
-
-        public DownloadImageTask(ImageView v, Context c) {
-            view = v;
-            context = c;
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... urls) {
-            String url = urls[0];
-            String filename = urls[1] + ".png";
-
-            File fileDest = new File(context.getFilesDir(), filename);
-            Bitmap img = null;
-            try {
-                InputStream in = new URL(url).openStream();
-                img = BitmapFactory.decodeStream(in);
-
-                FileOutputStream fOut = new FileOutputStream(fileDest);
-                img.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-                fOut.flush();
-                fOut.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return img;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            view.setImageBitmap(bitmap);
-        }
-    }
-
-    public MoviesGridItemAdapter(ArrayList<Movie> dataSet) {
+    public MoviesGridItemAdapter(ArrayList<CollectionMovie> dataSet, MoviesDatabaseHelper dbHelper) {
         data = dataSet;
+        helper = dbHelper;
     }
 
-    public void addItem(Movie movie, int index) {
+    public void addItem(CollectionMovie movie, int index) {
         data.add(index, movie);
         notifyItemInserted(index);
     }
 
     public void deleteItem(int index) {
-        data.remove(index);
-        notifyItemRemoved(index);
+
+        try {
+            helper.getCollectionMovieDao().delete(data.get(index));
+
+            data.remove(index);
+            notifyItemRemoved(index);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -103,11 +72,20 @@ public class MoviesGridItemAdapter extends RecyclerView.Adapter<MoviesGridItemAd
 
     @Override
     public void onBindViewHolder(final MovieGridItemViewHolder holder, int position) {
-        holder.title.setText(data.get(position).getTitre());
-        new DownloadImageTask(holder.image, holder.image.getContext()).execute(
-                data.get(position).getCover(),
-                data.get(position).getId().toString()
-        );
+        holder.title.setText(data.get(position).getMovie().getTitre());
+        try {
+            holder.image.setImageBitmap(BitmapFactory.decodeStream(
+                    new FileInputStream(
+                            new File(
+                                    holder.image.getContext().getFilesDir(),
+                                    data.get(position).getMovie().getCover()
+                            )
+                    )
+            ));
+        } catch (FileNotFoundException e) {
+            // TODO : Add default image
+            e.printStackTrace();
+        }
 
         holder.action.setOnClickListener(new View.OnClickListener() {
             @Override

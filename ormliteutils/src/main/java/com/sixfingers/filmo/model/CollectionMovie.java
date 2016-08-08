@@ -11,9 +11,9 @@ public class CollectionMovie {
 
     @DatabaseField(generatedId = true, columnName = ID)
     private Long id;
-    @DatabaseField(foreign = true, columnName = COLLECTION_ID, uniqueCombo = true)
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = COLLECTION_ID, uniqueCombo = true)
     private Collection collection;
-    @DatabaseField(foreign = true, columnName = MOVIE_ID, uniqueCombo = true)
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = MOVIE_ID, uniqueCombo = true)
     private Movie movie;
 
     public CollectionMovie() {}

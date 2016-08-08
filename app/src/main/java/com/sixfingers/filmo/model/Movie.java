@@ -141,4 +141,9 @@ public class Movie {
     public void setEdition(String edition) {
         this.edition = edition;
     }
+
+    @Override
+    public String toString() {
+        return "Movie[Id=" + getId() + ",Titre=" + getTitre() + "]";
+    }
 }

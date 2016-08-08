@@ -36,4 +36,9 @@ public class Collection {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "Collec[Id=" + getId() + ",Name=" + getName() + "]";
+    }
 }
