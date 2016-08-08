@@ -11,4 +11,6 @@
     <string name="search_menu">Search</string>
     <string name="menu_title">Collected</string>
     <string name="remove_collection">Remove from collection</string>
+    <string name="title_movie_detail">Movie Detail</string>
+    <string name="movie_poster">Movie poster</string>
 </resources>

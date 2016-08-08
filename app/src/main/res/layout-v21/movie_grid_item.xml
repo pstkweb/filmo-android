@@ -3,13 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <!-- https://github.com/codepath/android_guides/wiki/Shared-Element-Activity-Transition -->
     <ImageView
         android:id="@+id/movie_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:contentDescription="@string/movie_poster" />
+        android:contentDescription="@string/movie_poster"
+        android:transitionName="grid_item_to_activity"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -25,7 +27,6 @@
             android:contentDescription="@string/remove_collection"
             style="?android:attr/borderlessButtonStyle"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_margin="@dimen/grid_item_single_line_icon_margin"
             android:layout_centerVertical="true" />
 
@@ -38,11 +39,8 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/grid_item_single_line_text_size"
             android:paddingStart="@dimen/grid_item_single_line_text_margin"
-            android:paddingLeft="@dimen/grid_item_single_line_text_margin"
             android:paddingEnd="@dimen/grid_item_single_line_text_icon_side_margin"
-            android:paddingRight="@dimen/grid_item_single_line_text_icon_side_margin"
             android:layout_toStartOf="@id/grid_item_header_action"
-            android:layout_toLeftOf="@id/grid_item_header_action"
             android:layout_centerVertical="true"/>
 
     </RelativeLayout>

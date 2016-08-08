@@ -4,12 +4,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.view.Menu;
+import android.view.View;
 import android.webkit.URLUtil;
+
 
 import com.sixfingers.filmo.adapter.MoviesGridItemAdapter;
 import com.sixfingers.filmo.decoration.GridSpacingDecoration;
@@ -36,9 +40,23 @@ import java.util.List;
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
-public class MainActivity extends OrmLiteAppCompatActivity<MoviesDatabaseHelper> {
-    private MoviesGridItemAdapter gridListAdapter;
+/**
+ * An activity representing a list of Movies. This activity
+ * has different presentations for handset and tablet-size devices. On
+ * handsets, the activity presents a list of items, which when touched,
+ * lead to a {@link MovieDetailActivity} representing
+ * item details. On tablets, the activity presents the list of items and
+ * item details side-by-side using two vertical panes.
+ */
+public class MovieListActivity extends OrmLiteAppCompatActivity<MoviesDatabaseHelper> {
+
+    /**
+     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
+     * device.
+     */
+    private boolean mTwoPane;
     private QueriesRepository queriesRepository;
+    private MoviesGridItemAdapter gridListAdapter;
 
     private class SearchTask extends AsyncTask<String, Void, SearchResult> {
         @Override
@@ -135,26 +153,19 @@ public class MainActivity extends OrmLiteAppCompatActivity<MoviesDatabaseHelper>
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_movie_list);
 
-        setTitle(getResources().getString(R.string.menu_title));
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle(getTitle());
 
-        RecyclerView gridList = (RecyclerView) findViewById(R.id.grid_recycler);
-        gridList.setHasFixedSize(true);
-        gridList.setLayoutManager(new GridLayoutManager(this, 2));
-        gridList.addItemDecoration(
-                new GridSpacingDecoration(
-                        2,
-                        getResources().getDimensionPixelSize(R.dimen.grid_spacing),
-                        true,
-                        0
-                )
-        );
+        View recyclerView = findViewById(R.id.movie_list);
+        assert recyclerView != null;
+        setupRecyclerView((RecyclerView) recyclerView);
 
-        gridListAdapter = new MoviesGridItemAdapter(new ArrayList<CollectionMovie>(), getHelper());
-        gridListAdapter.setHasStableIds(true);
-        gridList.setAdapter(gridListAdapter);
+        if (findViewById(R.id.movie_detail_container) != null) {
+            mTwoPane = true;
+        }
 
         //deleteDatabase(MoviesDatabaseHelper.DATABASE_NAME);
         queriesRepository = new QueriesRepository(this);
@@ -177,5 +188,27 @@ public class MainActivity extends OrmLiteAppCompatActivity<MoviesDatabaseHelper>
         getMenuInflater().inflate(R.menu.home_menu, menu);
 
         return true;
+    }
+
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.addItemDecoration(
+                new GridSpacingDecoration(
+                        2,
+                        getResources().getDimensionPixelSize(R.dimen.grid_spacing),
+                        true,
+                        0
+                )
+        );
+
+        gridListAdapter = new MoviesGridItemAdapter(
+                new ArrayList<CollectionMovie>(),
+                getHelper(),
+                mTwoPane
+        );
+        gridListAdapter.setHasStableIds(true);
+
+        recyclerView.setAdapter(gridListAdapter);
     }
 }

@@ -46,9 +46,4 @@ public class CollectionMovie {
     public void setMovie(Movie movie) {
         this.movie = movie;
     }
-
-    @Override
-    public String toString() {
-        return "CollecMovie[Id=" + getId() + ",Movie=" + movie + ",Collec=" + collection + "]";
-    }
 }
