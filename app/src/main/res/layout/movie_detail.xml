@@ -1,9 +1,66 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/movie_detail"
-    style="?android:attr/textAppearanceLarge"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    android:textIsSelectable="true"
-    tools:context="com.sixfingers.filmo.MovieDetailFragment" />
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    tools:context="com.sixfingers.filmo.MovieDetailFragment"
+    android:layout_margin="16dp">
+
+    <ImageView
+        android:id="@+id/movie_poster"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:contentDescription="@string/movie_poster"
+        android:layout_weight="0.2"
+        android:adjustViewBounds="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="0.8">
+
+        <TextView
+            android:id="@+id/movie_synopsis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/year"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/movie_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/edition"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/movie_edition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

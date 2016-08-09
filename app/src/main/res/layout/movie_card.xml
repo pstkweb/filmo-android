@@ -23,7 +23,7 @@
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
                 android:src="@drawable/batman"
-                android:contentDescription="@string/movie_image" />
+                android:contentDescription="@string/movie_poster" />
 
         </android.support.percent.PercentRelativeLayout>
 
@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_card_giftcard_black_24dp"
-                android:contentDescription="@string/add_whishlist" />
+                android:contentDescription="@string/add_wish_list" />
 
         </LinearLayout>
 

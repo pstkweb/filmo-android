@@ -1,6 +1,9 @@
 package com.sixfingers.filmo;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,12 +11,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.sixfingers.filmo.helper.MoviesDatabaseHelper;
 import com.sixfingers.filmo.model.Movie;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 
 /**
@@ -76,7 +83,24 @@ public class MovieDetailFragment extends Fragment {
 
         // Show the content as text in a TextView.
         if (movie != null) {
-            ((TextView) rootView.findViewById(R.id.movie_detail)).setText(movie.getEditeur());
+            ((TextView) rootView.findViewById(R.id.movie_synopsis)).setText(movie.getEditeur());
+            ((TextView) rootView.findViewById(R.id.movie_year)).setText(movie.getAnnee()+"");
+            ((TextView) rootView.findViewById(R.id.movie_edition)).setText(movie.getEdition());
+
+            try {((ImageView) rootView.findViewById(R.id.movie_poster)).setImageBitmap(
+                    BitmapFactory.decodeStream(
+                        new FileInputStream(
+                                new File(
+                                        getContext().getFilesDir(),
+                                        movie.getCover()
+                                )
+                        )
+                    )
+                );
+            } catch (FileNotFoundException e) {
+                // TODO : default image
+                e.printStackTrace();
+            }
         }
 
         return rootView;

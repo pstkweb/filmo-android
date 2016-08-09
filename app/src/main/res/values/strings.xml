@@ -2,15 +2,20 @@
     <string name="app_name">Movies lib</string>
     <string name="add">Add a movie</string>
     <string name="scan">Scan a barcode</string>
-    <string name="search">Search a movie by title</string>
+    <string name="search_by_title">Search a movie by title</string>
     <string name="resume">Resume</string>
     <string name="pause">Pause</string>
     <string name="barcode_preview">Barcode preview</string>
-    <string name="movie_image">Movie poster</string>
-    <string name="add_whishlist">Add to wishlist</string>
+    <string name="add_wish_list">Add to wish list</string>
     <string name="search_menu">Search</string>
     <string name="menu_title">Collected</string>
     <string name="remove_collection">Remove from collection</string>
     <string name="title_movie_detail">Movie Detail</string>
     <string name="movie_poster">Movie poster</string>
+    <string name="year">Year:\u0020</string>
+    <string name="edition">Edition:\u0020</string>
+    <string name="add_collection">Add to collection</string>
+    <string name="back_button">Back button</string>
+    <string name="voice_search">Voice search</string>
+    <string name="search">Search</string>
 </resources>

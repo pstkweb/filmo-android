@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="@dimen/list_item_height"
+    android:paddingTop="@dimen/list_item_padding"
+    android:paddingBottom="@dimen/list_item_padding">
+
+    <ImageView
+        android:id="@+id/movie_poster"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/batman"
+        android:layout_marginStart="@dimen/list_item_start_icon_margin"
+        android:layout_marginLeft="@dimen/list_item_start_icon_margin"
+        android:layout_marginEnd="@dimen/list_item_start_icon_margin"
+        android:layout_marginRight="@dimen/list_item_start_icon_margin"
+        android:contentDescription="@string/movie_poster" />
+
+    <TextView
+        android:id="@+id/movie_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:textSize="@dimen/list_item_single_line_text_size"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Un titre trop long qui va certainement déborder" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add_white_48dp"
+        android:padding="@dimen/list_item_end_icon_padding"
+        android:contentDescription="@string/add_collection" />
+
+</LinearLayout>
