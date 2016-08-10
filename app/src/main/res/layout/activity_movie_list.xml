@@ -64,10 +64,12 @@
             app:backgroundTint="@color/colorAccent" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_menu_item21"
+            android:id="@+id/fab_menu_title_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_search_white_48dp"
+            android:clickable="true"
+            android:onClick="startSearchByTitle"
             app:backgroundTint="@color/colorAccent" />
 
     </com.sixfingers.ui.floatingactionmenu.FloatingActionMenu>

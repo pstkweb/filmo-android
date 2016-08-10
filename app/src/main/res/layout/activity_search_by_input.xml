@@ -1,44 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
     tools:context="com.sixfingers.filmo.SearchByInputActivity">
 
-    <android.support.v7.widget.CardView
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="?android:actionBarSize"
-        app:cardElevation="4dp">
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <LinearLayout
+        <android.support.v7.widget.SearchView
+            android:id="@+id/search_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:iconifiedByDefault="false" />
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_arrow_back_black_48dp"
-                android:contentDescription="@string/back_button"
-                style="?android:attr/borderlessButtonStyle" />
+    </android.support.design.widget.AppBarLayout>
 
-            <EditText
-                android:id="@+id/search_field"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:inputType="textNoSuggestions"
-                android:layout_weight="1"
-                android:hint="@string/search" />
+    <ProgressBar
+        android:id="@+id/list_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_below="@id/app_bar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_keyboard_voice_black_48dp"
-                style="?android:attr/borderlessButtonStyle"
-                android:contentDescription="@string/voice_search" />
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/list_spinner" />
 
-        </LinearLayout>
+    <LinearLayout
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
 
-    </android.support.v7.widget.CardView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_results_search_title"
+            android:textSize="20sp"/>
 
-</RelativeLayout>
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

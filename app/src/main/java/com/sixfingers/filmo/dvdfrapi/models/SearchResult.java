@@ -9,13 +9,15 @@ import org.simpleframework.xml.Path;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Text;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 @Root(name = "dvds")
 public class SearchResult {
     @Attribute(name = "generator")
     private String generator;
-    @ElementList(inline = true)
+    @ElementList(inline = true, required = false)
     private List<DVDResult> dvds;
 
     public SearchResult(
@@ -32,6 +34,15 @@ public class SearchResult {
 
     public String getGenerator() {
         return generator;
+    }
+
+    public ArrayList<Movie> toList() {
+        ArrayList<Movie> movies = new ArrayList<>();
+        for (DVDResult result : dvds) {
+            movies.add(result.toMovie());
+        }
+
+        return movies;
     }
 
     @Override

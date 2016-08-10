@@ -21,7 +21,7 @@ public class DVDResult {
     @Element(name = "fr")
     private String titre;
     @Path("titres")
-    @Element(name = "vo")
+    @Element(name = "vo", required = false)
     private String titreVO;
     @Path("titres")
     @Element(name = "alternatif", required = false)

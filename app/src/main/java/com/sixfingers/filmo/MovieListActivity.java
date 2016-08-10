@@ -1,10 +1,10 @@
 package com.sixfingers.filmo;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -148,6 +148,11 @@ public class MovieListActivity extends OrmLiteAppCompatActivity<MoviesDatabaseHe
         }
     }
 
+    public void startSearchByTitle(View view) {
+        Intent intent = new Intent(this, SearchByInputActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -188,7 +193,7 @@ public class MovieListActivity extends OrmLiteAppCompatActivity<MoviesDatabaseHe
         return true;
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+    private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.addItemDecoration(
