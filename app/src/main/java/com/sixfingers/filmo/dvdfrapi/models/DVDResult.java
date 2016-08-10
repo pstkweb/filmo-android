@@ -29,7 +29,7 @@ public class DVDResult {
     @Path("titres")
     @Element(name = "alternatif_vo", required = false)
     private String titreVOAlt;
-    @Element(name = "annee")
+    @Element(name = "annee", required = false)
     private int annee;
     @Element(name = "editeur")
     private String editeur;
@@ -63,6 +63,8 @@ public class DVDResult {
         this.edition = edition;
         this.stars = stars;
     }
+
+    public DVDResult() {}
 
     public int getId() {
         return id;

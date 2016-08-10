@@ -1,7 +1,6 @@
 package com.sixfingers.filmo.runnable;
 
-import android.app.ListActivity;
-import android.app.ProgressDialog;
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -9,10 +8,12 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.URLUtil;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
+import com.sixfingers.filmo.R;
 import com.sixfingers.filmo.dvdfrapi.DVDFrService;
 import com.sixfingers.filmo.dvdfrapi.models.DVDResult;
 import com.sixfingers.filmo.dvdfrapi.models.SearchResult;
@@ -33,14 +34,14 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class SearchByTitle extends AsyncTask<String, Void, ArrayList<Movie>> {
     private MoviesDatabaseHelper helper;
-    private ListActivity context;
+    private Activity context;
     private ProgressBar progress;
-    private ArrayAdapter<Movie> adapter;
+    private ListView listView;
 
-    public SearchByTitle(ListActivity ctx, ProgressBar progressBar, ArrayAdapter<Movie> moviesAdapter) {
+    public SearchByTitle(Activity ctx, ProgressBar progressBar, ListView list) {
         context = ctx;
         progress = progressBar;
-        adapter = moviesAdapter;
+        listView = list;
         helper = OpenHelperManager.getHelper(context, MoviesDatabaseHelper.class);
     }
 
@@ -94,9 +95,9 @@ public class SearchByTitle extends AsyncTask<String, Void, ArrayList<Movie>> {
                             result.add(movie);
                         }
                     }
-                } else {
-                    // TODO : no result
                 }
+
+                return result;
             }
         } catch (SQLException e) {
             Log.d("TEST", "SQLException " + e.getMessage());
@@ -104,19 +105,25 @@ public class SearchByTitle extends AsyncTask<String, Void, ArrayList<Movie>> {
             Log.d("TEST", "IOException on API request " + e.getMessage());
         }
 
-        return result;
+        return null;
     }
 
     @Override
     protected void onPreExecute() {
-        //progress.setVisibility(View.VISIBLE);
+        progress.setVisibility(View.VISIBLE);
     }
 
     @Override
     protected void onPostExecute(ArrayList<Movie> movies) {
+        @SuppressWarnings("unchecked")
+        ArrayAdapter<Movie> adapter = (ArrayAdapter<Movie>) listView.getAdapter();
         adapter.addAll(movies);
         adapter.notifyDataSetChanged();
 
-        //progress.setVisibility(View.GONE);
+        if (movies.size() == 0) {
+            listView.setEmptyView(context.findViewById(R.id.list_empty));
+        }
+
+        progress.setVisibility(View.GONE);
     }
 }

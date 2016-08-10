@@ -97,7 +97,7 @@ public class MoviesGridItemAdapter extends RecyclerView.Adapter<MoviesGridItemAd
                     )
             ));
         } catch (FileNotFoundException e) {
-            // TODO : Add default image
+            // TODO : default image
             e.printStackTrace();
         }
 

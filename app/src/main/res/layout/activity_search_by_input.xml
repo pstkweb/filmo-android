@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.sixfingers.filmo.SearchByInputActivity">
+    tools:context=".SearchByInputActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -12,21 +13,23 @@
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.v7.widget.SearchView
-            android:id="@+id/search_view"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:iconifiedByDefault="false" />
+            android:layout_height="?attr/actionBarSize"
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     </android.support.design.widget.AppBarLayout>
 
     <ProgressBar
         android:id="@+id/list_spinner"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         android:indeterminate="true"
         android:layout_below="@id/app_bar"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
+        android:layout_gravity="center" />
 
     <ListView
         android:id="@android:id/list"
@@ -35,10 +38,11 @@
         android:layout_below="@id/list_spinner" />
 
     <LinearLayout
-        android:id="@android:id/empty"
+        android:id="@+id/list_empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:gravity="center"
+        android:visibility="invisible">
 
         <TextView
             android:layout_width="wrap_content"
