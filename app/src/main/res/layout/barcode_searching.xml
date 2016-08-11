@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/list_item_single_line_height"
+    android:paddingTop="@dimen/list_item_padding"
+    android:paddingBottom="@dimen/list_item_padding"
+    android:id="@+id/barcode_searching">
+
+    <ProgressBar
+        android:id="@+id/action_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_marginStart="@dimen/list_item_start_icon_margin"
+        android:layout_marginLeft="@dimen/list_item_start_icon_margin"
+        android:layout_marginEnd="@dimen/list_item_start_icon_margin"
+        android:layout_marginRight="@dimen/list_item_start_icon_margin"
+        android:layout_gravity="center_vertical" />
+
+    <TextView
+        android:id="@+id/barcode_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="@dimen/list_item_primary_text_size"
+        android:textColor="@android:color/primary_text_light"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_marginRight="@dimen/list_item_start_icon_margin"
+        android:layout_marginEnd="@dimen/list_item_start_icon_margin"
+        android:text="12345674891235"
+        android:layout_gravity="center_vertical" />
+
+</LinearLayout>

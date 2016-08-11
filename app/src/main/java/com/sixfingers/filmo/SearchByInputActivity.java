@@ -36,6 +36,7 @@ public class SearchByInputActivity extends AppCompatActivity {
 
         ListView listView = (ListView) findViewById(android.R.id.list);
         listView.setAdapter(new MoviesListItemAdapter(this, new ArrayList<Movie>()));
+        listView.setEmptyView(findViewById(android.R.id.empty));
 
         intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {

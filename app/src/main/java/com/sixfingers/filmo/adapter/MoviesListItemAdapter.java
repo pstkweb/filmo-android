@@ -23,12 +23,14 @@ public class MoviesListItemAdapter extends ArrayAdapter<Movie> {
 
     public static class MovieItemViewHolder extends RecyclerView.ViewHolder {
         public TextView movieTitle;
+        public TextView movieTypeAndEdition;
         public ImageView moviePoster;
 
         public MovieItemViewHolder(View itemView) {
             super(itemView);
 
             movieTitle = (TextView) itemView.findViewById(R.id.movie_title);
+            movieTypeAndEdition = (TextView) itemView.findViewById(R.id.movie_type_edition);
             moviePoster = (ImageView) itemView.findViewById(R.id.movie_poster);
         }
     }
@@ -55,13 +57,21 @@ public class MoviesListItemAdapter extends ArrayAdapter<Movie> {
             viewHolder = (MovieItemViewHolder) convertView.getTag();
         }
 
-        viewHolder.movieTitle.setText(movies.get(position).getTitre());
+        Movie movie = movies.get(position);
+        viewHolder.movieTitle.setText(movie.getTitre());
+
+        String typeEdition = movie.getMedia();
+        if (movie.getEdition() != null && !movie.getEdition().isEmpty()) {
+            typeEdition += (typeEdition != null && !typeEdition.isEmpty() ? " - " : "") +
+                    movie.getEdition();
+        }
+        viewHolder.movieTypeAndEdition.setText(typeEdition);
         try {
             viewHolder.moviePoster.setImageBitmap(BitmapFactory.decodeStream(
                     new FileInputStream(
                             new File(
                                     getContext().getFilesDir(),
-                                    movies.get(position).getCover()
+                                    movie.getCover()
                             )
                     )
             ));

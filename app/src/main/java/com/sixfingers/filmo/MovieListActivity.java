@@ -1,42 +1,24 @@
 package com.sixfingers.filmo;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
-import android.webkit.URLUtil;
-
 
 import com.sixfingers.filmo.adapter.MoviesGridItemAdapter;
 import com.sixfingers.filmo.decoration.GridSpacingDecoration;
-import com.sixfingers.filmo.dvdfrapi.DVDFrService;
-import com.sixfingers.filmo.dvdfrapi.models.DVDResult;
-import com.sixfingers.filmo.dvdfrapi.models.SearchResult;
-import com.sixfingers.filmo.dvdfrapi.models.SupportType;
 import com.sixfingers.filmo.helper.MoviesDatabaseHelper;
 import com.sixfingers.filmo.model.Collection;
 import com.sixfingers.filmo.model.CollectionMovie;
-import com.sixfingers.filmo.model.Movie;
 import com.sixfingers.filmo.ormlite.OrmLiteAppCompatActivity;
 import com.sixfingers.filmo.ormlite.QueriesRepository;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Retrofit;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 /**
  * An activity representing a list of Movies. This activity
@@ -53,105 +35,7 @@ public class MovieListActivity extends OrmLiteAppCompatActivity<MoviesDatabaseHe
      * device.
      */
     private boolean mTwoPane;
-    private QueriesRepository queriesRepository;
     private MoviesGridItemAdapter gridListAdapter;
-
-    private class SearchTask extends AsyncTask<String, Void, SearchResult> {
-        @Override
-        protected SearchResult doInBackground(String... params) {
-            DVDFrService service = new Retrofit.Builder()
-                    .baseUrl(DVDFrService.ENDPOINT)
-                    .addConverterFactory(SimpleXmlConverterFactory.create())
-                    .build()
-                    .create(DVDFrService.class);
-
-            try {
-                SearchResult searchResult = service.searchByTitle(
-                        params[0],
-                        SupportType.ALL
-                ).execute().body();
-
-                if (searchResult != null) {
-                    for (DVDResult dvd : searchResult.getDVDs()) {
-                        Movie movie = dvd.toMovie();
-                        Movie existing = getHelper().getMovieDao().queryForId(movie.getId());
-                        if (existing == null) {
-                            getHelper().getMovieDao().create(movie);
-                        } else {
-                            movie = existing;
-                        }
-
-                        if (URLUtil.isValidUrl(movie.getCover())) {
-                            // Download image
-                            String file = movie.getId() + ".png";
-                            File fileDest = new File(getFilesDir(), file);
-                            try {
-                                InputStream in = new URL(movie.getCover()).openStream();
-                                Bitmap img = BitmapFactory.decodeStream(in);
-
-                                FileOutputStream fOut = new FileOutputStream(fileDest);
-                                img.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-                                fOut.flush();
-                                fOut.close();
-
-                                movie.setCover(file);
-                                getHelper().getMovieDao().update(movie);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        Collection collected = queriesRepository.getCollectionByName(Collection.COLLECTED);
-                        CollectionMovie relation = new CollectionMovie(
-                                collected,
-                                movie
-                        );
-                        getHelper().getCollectionMovieDao().createIfNotExists(relation);
-                    }
-                }
-
-                return searchResult;
-            } catch (IOException | SQLException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(SearchResult searchResult) {
-            super.onPostExecute(searchResult);
-
-            displayGridItems();
-        }
-    }
-
-    public void displayGridItems() {
-        try {
-            displayGridItems(queriesRepository.getMoviesCollection(
-                    queriesRepository.getCollectionByName(Collection.COLLECTED)
-            ));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void displayGridItems(java.util.Collection<CollectionMovie> movies) {
-        for (CollectionMovie movie : movies) {
-            try {
-                getHelper().getMovieDao().refresh(movie.getMovie());
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            gridListAdapter.addItem(movie, gridListAdapter.getItemCount());
-        }
-    }
-
-    public void startSearchByTitle(View view) {
-        Intent intent = new Intent(this, SearchByInputActivity.class);
-        startActivity(intent);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,16 +55,13 @@ public class MovieListActivity extends OrmLiteAppCompatActivity<MoviesDatabaseHe
         }
 
         //deleteDatabase(MoviesDatabaseHelper.DATABASE_NAME);
-        queriesRepository = new QueriesRepository(this);
+        QueriesRepository queriesRepository = new QueriesRepository(this);
         try {
             List<CollectionMovie> movies = queriesRepository.getMoviesCollection(
                     queriesRepository.getCollectionByName(Collection.COLLECTED)
             );
-            if (movies.size() == 0) {
-                new SearchTask().execute("Batman");
-            } else {
-                this.displayGridItems(movies);
-            }
+
+            displayGridItems(movies);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -191,6 +72,32 @@ public class MovieListActivity extends OrmLiteAppCompatActivity<MoviesDatabaseHe
         getMenuInflater().inflate(R.menu.home_menu, menu);
 
         return true;
+    }
+
+    public void displayGridItems(java.util.Collection<CollectionMovie> movies) {
+        if (movies.size() > 0) {
+            findViewById(android.R.id.empty).setVisibility(View.GONE);
+        }
+
+        for (CollectionMovie movie : movies) {
+            try {
+                getHelper().getMovieDao().refresh(movie.getMovie());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            gridListAdapter.addItem(movie, gridListAdapter.getItemCount());
+        }
+    }
+
+    public void startSearchByTitle(View view) {
+        Intent intent = new Intent(this, SearchByInputActivity.class);
+        startActivity(intent);
+    }
+
+    public void startSearchByScan(View view) {
+        Intent intent = new Intent(this, SearchByScanActivity.class);
+        startActivity(intent);
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {

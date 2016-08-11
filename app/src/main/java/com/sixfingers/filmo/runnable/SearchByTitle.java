@@ -10,6 +10,7 @@ import android.webkit.URLUtil;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
@@ -110,18 +111,22 @@ public class SearchByTitle extends AsyncTask<String, Void, ArrayList<Movie>> {
 
     @Override
     protected void onPreExecute() {
+        ((TextView) context.findViewById(R.id.empty_text)).setText("");
         progress.setVisibility(View.VISIBLE);
     }
 
     @Override
     protected void onPostExecute(ArrayList<Movie> movies) {
-        @SuppressWarnings("unchecked")
-        ArrayAdapter<Movie> adapter = (ArrayAdapter<Movie>) listView.getAdapter();
-        adapter.addAll(movies);
-        adapter.notifyDataSetChanged();
 
         if (movies.size() == 0) {
-            listView.setEmptyView(context.findViewById(R.id.list_empty));
+            ((TextView) context.findViewById(R.id.empty_text)).setText(
+                    R.string.no_results_search_title
+            );
+        } else {
+            @SuppressWarnings("unchecked")
+            ArrayAdapter<Movie> adapter = (ArrayAdapter<Movie>) listView.getAdapter();
+            adapter.addAll(movies);
+            adapter.notifyDataSetChanged();
         }
 
         progress.setVisibility(View.GONE);

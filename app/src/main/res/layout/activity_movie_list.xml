@@ -43,6 +43,63 @@
         <include layout="@layout/movie_list" />
     </FrameLayout>
 
+    <android.support.v7.widget.CardView
+        android:id="@android:id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/empty_info_margin"
+        android:layout_gravity="center"
+        app:cardBackgroundColor="@color/colorPrimaryDark"
+        app:cardCornerRadius="@dimen/cardview_default_radius"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="16dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/get_started"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large.Inverse"
+                android:layout_marginBottom="@dimen/card_actions_padding"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="@string/collected_empty_state"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium.Inverse"
+                android:layout_marginBottom="@dimen/card_primary_text_bottom_padding"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                style="?android:attr/buttonBarStyle">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/scan_barcode"
+                    android:onClick="startSearchByScan"
+                    style="@style/Widget.AppCompat.Button" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/search_title"
+                    android:onClick="startSearchByTitle"
+                    style="@style/Widget.AppCompat.Button" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
     <com.sixfingers.ui.floatingactionmenu.FloatingActionMenu
         android:id="@+id/FAM"
         android:layout_width="wrap_content"
@@ -61,6 +118,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_photo_camera_white_48dp"
+            android:clickable="true"
+            android:onClick="startSearchByScan"
             app:backgroundTint="@color/colorAccent" />
 
         <android.support.design.widget.FloatingActionButton

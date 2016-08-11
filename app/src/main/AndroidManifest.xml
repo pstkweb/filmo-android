@@ -24,7 +24,6 @@
         <activity
             android:name=".MovieDetailActivity"
             android:label="@string/title_movie_detail"
-            android:parentActivityName=".MovieListActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -33,8 +32,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sixfingers.filmo.MovieListActivity" />
         </activity>
-        <activity android:name=".SearchByInputActivity"
-            android:parentActivityName=".MovieListActivity">
+        <activity android:name=".SearchByInputActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -44,7 +42,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sixfingers.filmo.MovieListActivity" />
         </activity>
-        <activity android:name=".SearchByScanActivity" />
+        <activity android:name=".SearchByScanActivity"
+            android:label="@string/search_by_scan">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sixfingers.filmo.MovieListActivity" />
+        </activity>
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
