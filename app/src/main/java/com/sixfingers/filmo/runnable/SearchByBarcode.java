@@ -5,16 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
 import android.webkit.URLUtil;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-
 import com.sixfingers.filmo.R;
+import com.sixfingers.filmo.adapter.BarcodeListItemAdapter;
 import com.sixfingers.filmo.dvdfrapi.DVDFrService;
 import com.sixfingers.filmo.dvdfrapi.models.DVDResult;
 import com.sixfingers.filmo.dvdfrapi.models.SearchResult;
@@ -33,16 +29,15 @@ import java.util.ArrayList;
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
-public class SearchByTitle extends AsyncTask<String, Void, ArrayList<Movie>> {
+public class SearchByBarcode extends AsyncTask<String, Void, ArrayList<Movie>> {
     private MoviesDatabaseHelper helper;
     private Activity context;
-    private ProgressBar progress;
-    private ListView listView;
+    private BarcodeListItemAdapter adapter;
+    private String barcode;
 
-    public SearchByTitle(Activity ctx, ProgressBar progressBar, ListView list) {
+    public SearchByBarcode(Activity ctx, BarcodeListItemAdapter listAdapter) {
         context = ctx;
-        progress = progressBar;
-        listView = list;
+        adapter = listAdapter;
         helper = OpenHelperManager.getHelper(context, MoviesDatabaseHelper.class);
     }
 
@@ -56,8 +51,9 @@ public class SearchByTitle extends AsyncTask<String, Void, ArrayList<Movie>> {
                 .create(DVDFrService.class);
 
         try {
-            SearchResult searchResult = service.searchByTitle(
-                    params[0],
+            barcode = params[0];
+            SearchResult searchResult = service.searchByGencode(
+                    barcode,
                     SupportType.valueOf(params[1])
             ).execute().body();
 
@@ -112,25 +108,13 @@ public class SearchByTitle extends AsyncTask<String, Void, ArrayList<Movie>> {
     }
 
     @Override
-    protected void onPreExecute() {
-        ((TextView) context.findViewById(R.id.empty_text)).setText("");
-        progress.setVisibility(View.VISIBLE);
-    }
-
-    @Override
     protected void onPostExecute(ArrayList<Movie> movies) {
-
         if (movies.size() == 0) {
             ((TextView) context.findViewById(R.id.empty_text)).setText(
                     R.string.no_results_search_title
             );
         } else {
-            @SuppressWarnings("unchecked")
-            ArrayAdapter<Movie> adapter = (ArrayAdapter<Movie>) listView.getAdapter();
-            adapter.addAll(movies);
-            adapter.notifyDataSetChanged();
+            adapter.updateItem(barcode, movies);
         }
-
-        progress.setVisibility(View.GONE);
     }
 }

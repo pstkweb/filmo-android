@@ -1,6 +1,8 @@
 package com.sixfingers.filmo.adapter;
 
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +13,15 @@ import android.widget.TextView;
 import com.sixfingers.filmo.R;
 import com.sixfingers.filmo.model.Movie;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class BarcodeListItemAdapter extends BaseAdapter {
-    private HashMap<String, Movie> map;
+    private HashMap<String, List<Movie>> map;
     private String[] keys;
 
     public static class BarcodeSearchViewHolder extends RecyclerView.ViewHolder {
@@ -29,14 +36,20 @@ public class BarcodeListItemAdapter extends BaseAdapter {
         }
     }
 
-    public BarcodeListItemAdapter(HashMap<String, Movie> barcodes) {
+    public static class BarcodeFoundViewHolder extends RecyclerView.ViewHolder {
+        public BarcodeFoundViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
+    public BarcodeListItemAdapter(HashMap<String, List<Movie>> barcodes) {
         map = barcodes;
         keys = barcodes.keySet().toArray(new String[barcodes.size()]);
     }
 
     public boolean add(String text) {
         if (!map.containsKey(text)) {
-            map.put(text, null);
+            map.put(text, new ArrayList<Movie>());
             keys = map.keySet().toArray(new String[map.size()]);
 
             notifyDataSetChanged();
@@ -47,13 +60,19 @@ public class BarcodeListItemAdapter extends BaseAdapter {
         return false;
     }
 
+    public void updateItem(String barcode, List<Movie> movies) {
+        map.put(barcode, movies);
+
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return map.size();
     }
 
     @Override
-    public Movie getItem(int i) {
+    public List<Movie> getItem(int i) {
         return map.get(keys[i]);
     }
 
@@ -65,24 +84,60 @@ public class BarcodeListItemAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         String barcode = keys[position];
-        Movie movie = map.get(barcode);
+        List<Movie> movies = getItem(position);
 
-        BarcodeSearchViewHolder viewHolder;
-        if (convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(
-                    R.layout.barcode_searching,
-                    parent,
-                    false
-            );
+        Log.d("TEST", barcode + " " + movies.size());
+        if (movies.size() == 0) {
+            BarcodeSearchViewHolder viewHolder;
+            if (convertView == null) {
+                convertView = LayoutInflater.from(parent.getContext()).inflate(
+                        R.layout.barcode_searching_list_item,
+                        parent,
+                        false
+                );
+            }
 
             viewHolder = new BarcodeSearchViewHolder(convertView);
+            viewHolder.barcodeText.setText(barcode);
+        } else if (movies.size() == 1) {
+            MoviesListItemAdapter.MovieItemViewHolder viewHolder;
+            if (convertView == null || convertView.getId() != R.id.movie_list_item) {
+                convertView = LayoutInflater.from(parent.getContext()).inflate(
+                        R.layout.movie_list_item,
+                        parent,
+                        false
+                );
 
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (BarcodeSearchViewHolder) convertView.getTag();
+                viewHolder = new MoviesListItemAdapter.MovieItemViewHolder(convertView);
+
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (MoviesListItemAdapter.MovieItemViewHolder) convertView.getTag();
+            }
+
+            Movie movie = movies.get(0);
+            viewHolder.movieTitle.setText(movie.getTitre());
+
+            String typeEdition = movie.getMedia();
+            if (movie.getEdition() != null && !movie.getEdition().isEmpty()) {
+                typeEdition += (typeEdition != null && !typeEdition.isEmpty() ? " - " : "") +
+                        movie.getEdition();
+            }
+            viewHolder.movieTypeAndEdition.setText(typeEdition);
+            try {
+                viewHolder.moviePoster.setImageBitmap(BitmapFactory.decodeStream(
+                        new FileInputStream(
+                                new File(
+                                        convertView.getContext().getFilesDir(),
+                                        movie.getCover()
+                                )
+                        )
+                ));
+            } catch (FileNotFoundException e) {
+                // TODO : default image
+                e.printStackTrace();
+            }
         }
-
-        viewHolder.barcodeText.setText(barcode);
 
         return convertView;
     }

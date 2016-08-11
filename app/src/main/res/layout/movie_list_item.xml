@@ -3,7 +3,8 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="@dimen/list_item_two_lines_height"
     android:paddingTop="@dimen/list_item_padding"
-    android:paddingBottom="@dimen/list_item_padding">
+    android:paddingBottom="@dimen/list_item_padding"
+    android:id="@+id/movie_list_item">
 
     <ImageView
         android:id="@+id/movie_poster"
@@ -11,7 +12,6 @@
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/batman"
         android:layout_marginStart="@dimen/list_item_start_icon_margin"
         android:layout_marginLeft="@dimen/list_item_start_icon_margin"
         android:layout_marginEnd="@dimen/list_item_start_icon_margin"
@@ -34,8 +34,7 @@
             android:textSize="@dimen/list_item_primary_text_size"
             android:textColor="@android:color/primary_text_light"
             android:ellipsize="end"
-            android:maxLines="1"
-            android:text="Un texte bien trop long qui va déborder de toute façon"/>
+            android:maxLines="1" />
 
         <TextView
             android:id="@+id/movie_type_edition"

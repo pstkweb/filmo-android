@@ -1,10 +1,11 @@
 package com.sixfingers.filmo;
 
+import android.app.Activity;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.ListView;
 
@@ -13,7 +14,9 @@ import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.sixfingers.filmo.adapter.BarcodeListItemAdapter;
+import com.sixfingers.filmo.dvdfrapi.models.SupportType;
 import com.sixfingers.filmo.model.Movie;
+import com.sixfingers.filmo.runnable.SearchByBarcode;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,18 +29,28 @@ public class SearchByScanActivity extends AppCompatActivity {
         @Override
         public void barcodeResult(BarcodeResult result) {
             if (result.getText() != null) {
-                if (!simpleAdapter.add(result.getText())) {
+                String barcode = ("0000000000000" + result.getText()).substring(
+                        result.getText().length()
+                );
+                if (!simpleAdapter.add(barcode)) {
+                    Log.d("TEST", "Barcode: " + barcode);
+
                     Snackbar.make(
                             findViewById(android.R.id.content),
                             String.format(
                                     getResources().getString(R.string.already_scanned),
-                                    result.getText()
+                                    barcode
                             ),
                             Snackbar.LENGTH_LONG
                     ).show();
                 }
 
-                barcodeView.setStatusText(result.getText());
+                barcodeView.setStatusText(barcode);
+
+                new SearchByBarcode((Activity) barcodeView.getContext(), simpleAdapter).execute(
+                        barcode,
+                        String.valueOf(SupportType.ALL)
+                );
             }
         }
 
@@ -64,7 +77,7 @@ public class SearchByScanActivity extends AppCompatActivity {
         ListView list = (ListView) findViewById(R.id.scanned_list);
         list.setEmptyView(findViewById(android.R.id.empty));
 
-        simpleAdapter = new BarcodeListItemAdapter(new HashMap<String, Movie >());
+        simpleAdapter = new BarcodeListItemAdapter(new HashMap<String, List<Movie>>());
         list.setAdapter(simpleAdapter);
     }
 
