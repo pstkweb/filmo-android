@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.ListView;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
@@ -19,7 +20,9 @@ import com.sixfingers.filmo.model.Movie;
 import com.sixfingers.filmo.runnable.SearchByBarcode;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SearchByScanActivity extends AppCompatActivity {
     private DecoratedBarcodeView barcodeView;
@@ -28,29 +31,41 @@ public class SearchByScanActivity extends AppCompatActivity {
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
+            Set<BarcodeFormat> acceptedFormats = new HashSet<BarcodeFormat>(){{
+                add(BarcodeFormat.EAN_13);
+                add(BarcodeFormat.UPC_A);
+            }};
+
             if (result.getText() != null) {
                 String barcode = ("0000000000000" + result.getText()).substring(
                         result.getText().length()
                 );
-                if (!simpleAdapter.add(barcode)) {
-                    Log.d("TEST", "Barcode: " + barcode);
+                if (acceptedFormats.contains(result.getBarcodeFormat())) {
+                    if (simpleAdapter.add(barcode)) {
+                        barcodeView.setStatusText(barcode);
 
+                        Log.d("TEST", "Add barcode " + barcode);
+                        new SearchByBarcode((Activity) barcodeView.getContext(), simpleAdapter).execute(
+                                barcode,
+                                String.valueOf(SupportType.ALL)
+                        );
+                    } else {
+                        Snackbar.make(
+                                findViewById(android.R.id.content),
+                                String.format(
+                                        getResources().getString(R.string.already_scanned),
+                                        barcode
+                                ),
+                                Snackbar.LENGTH_LONG
+                        ).show();
+                    }
+                } else {
                     Snackbar.make(
                             findViewById(android.R.id.content),
-                            String.format(
-                                    getResources().getString(R.string.already_scanned),
-                                    barcode
-                            ),
+                            getResources().getString(R.string.wrong_format),
                             Snackbar.LENGTH_LONG
                     ).show();
                 }
-
-                barcodeView.setStatusText(barcode);
-
-                new SearchByBarcode((Activity) barcodeView.getContext(), simpleAdapter).execute(
-                        barcode,
-                        String.valueOf(SupportType.ALL)
-                );
             }
         }
 
@@ -93,6 +108,16 @@ public class SearchByScanActivity extends AppCompatActivity {
         super.onPause();
 
         barcodeView.pause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override

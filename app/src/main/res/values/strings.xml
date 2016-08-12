@@ -21,6 +21,7 @@
     <string name="search">Search</string>
     <string name="search_hint">Search movies</string>
     <string name="no_results_search_title">No results for this search query</string>
+    <string name="no_result_search_barcode">No results for this barcode</string>
     <string name="no_query_search_title">Search something to get results</string>
     <string name="collected_empty_state">This list contains all the movies that you physically own. To add items use the + button or buttons below.</string>
     <string name="get_started">Get started</string>
@@ -28,4 +29,5 @@
     <string name="search_title">Search by title</string>
     <string name="no_result_scan">Scan a barcode to add movies</string>
     <string name="already_scanned">\'%s\' barcode already scanned</string>
+    <string name="wrong_format">This barcode is in a wrong format</string>
 </resources>

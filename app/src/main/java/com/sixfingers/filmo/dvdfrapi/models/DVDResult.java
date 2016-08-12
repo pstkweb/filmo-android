@@ -2,14 +2,16 @@ package com.sixfingers.filmo.dvdfrapi.models;
 
 import com.sixfingers.filmo.model.Movie;
 
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Path;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.Text;
 
 import java.util.List;
 
-@Root(name = "dvd")
+@Root
 public class DVDResult {
     @Element(name = "id")
     private int id;
@@ -37,32 +39,6 @@ public class DVDResult {
     private String edition;
     @ElementList(name = "stars")
     private List<Person> stars;
-
-    public DVDResult(
-            @Element(name = "id") int id,
-            @Element(name = "media") String media,
-            @Element(name = "cover") String cover,
-            @Element(name = "fr") String titre,
-            @Element(name = "vo") String titreVO,
-            @Element(name = "alternatif") String titreAlt,
-            @Element(name = "alternatif_vo") String titreVOAlt,
-            @Element(name = "annee") int annee,
-            @Element(name = "editeur") String editeur,
-            @Element(name = "edition") String edition,
-            @ElementList(name = "stars") List<Person> stars
-    ) {
-        this.id = id;
-        this.media = media;
-        this.cover = cover;
-        this.titre = titre;
-        this.titreVO = titreVO;
-        this.titreAlt = titreAlt;
-        this.titreVOAlt = titreVOAlt;
-        this.annee = annee;
-        this.editeur = editeur;
-        this.edition = edition;
-        this.stars = stars;
-    }
 
     public DVDResult() {}
 
@@ -128,5 +104,34 @@ public class DVDResult {
     @Override
     public String toString() {
         return titre;
+    }
+}
+
+@Root
+class Person {
+    @Attribute(name = "type")
+    private String role;
+    @Attribute(name = "id")
+    private int id;
+    @Text
+    private String name;
+
+    public Person() {}
+
+    public String getRole() {
+        return role;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return name + " <" + role + ">";
     }
 }

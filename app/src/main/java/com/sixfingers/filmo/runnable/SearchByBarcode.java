@@ -6,12 +6,10 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.webkit.URLUtil;
-import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.sixfingers.filmo.R;
 import com.sixfingers.filmo.adapter.BarcodeListItemAdapter;
-import com.sixfingers.filmo.dvdfrapi.DVDFrService;
+import com.sixfingers.filmo.dvdfrapi.APIHandler;
 import com.sixfingers.filmo.dvdfrapi.models.DVDResult;
 import com.sixfingers.filmo.dvdfrapi.models.SearchResult;
 import com.sixfingers.filmo.dvdfrapi.models.SupportType;
@@ -25,9 +23,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import retrofit2.Retrofit;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class SearchByBarcode extends AsyncTask<String, Void, ArrayList<Movie>> {
     private MoviesDatabaseHelper helper;
@@ -44,18 +39,14 @@ public class SearchByBarcode extends AsyncTask<String, Void, ArrayList<Movie>> {
     @Override
     protected ArrayList<Movie> doInBackground(String... params) {
         ArrayList<Movie> result = new ArrayList<>();
-        DVDFrService service = new Retrofit.Builder()
-                .baseUrl(DVDFrService.ENDPOINT)
-                .addConverterFactory(SimpleXmlConverterFactory.create())
-                .build()
-                .create(DVDFrService.class);
-
         try {
             barcode = params[0];
-            SearchResult searchResult = service.searchByGencode(
+
+            APIHandler handler = new APIHandler();
+            SearchResult searchResult = handler.searchByGencode(
                     barcode,
                     SupportType.valueOf(params[1])
-            ).execute().body();
+            );
 
             if (searchResult != null) {
                 if (searchResult.getDVDs() != null) {
@@ -109,10 +100,8 @@ public class SearchByBarcode extends AsyncTask<String, Void, ArrayList<Movie>> {
 
     @Override
     protected void onPostExecute(ArrayList<Movie> movies) {
-        if (movies.size() == 0) {
-            ((TextView) context.findViewById(R.id.empty_text)).setText(
-                    R.string.no_results_search_title
-            );
+        if (movies == null || movies.size() == 0) {
+            adapter.updateItem(barcode, new ArrayList<Movie>());
         } else {
             adapter.updateItem(barcode, movies);
         }

@@ -49,7 +49,7 @@ public class SearchByTitle extends AsyncTask<String, Void, ArrayList<Movie>> {
     @Override
     protected ArrayList<Movie> doInBackground(String... params) {
         ArrayList<Movie> result = new ArrayList<>();
-        DVDFrService service = new Retrofit.Builder()
+        /*DVDFrService service = new Retrofit.Builder()
                 .baseUrl(DVDFrService.ENDPOINT)
                 .addConverterFactory(SimpleXmlConverterFactory.create())
                 .build()
@@ -106,9 +106,9 @@ public class SearchByTitle extends AsyncTask<String, Void, ArrayList<Movie>> {
         } catch (IOException e) {
             // TODO : Handle exception
             Log.d("TEST", "IOException on API request " + e.getMessage());
-        }
+        }*/
 
-        return null;
+        return result;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.sixfingers.filmo.adapter;
 
 import android.graphics.BitmapFactory;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +34,19 @@ public class BarcodeListItemAdapter extends BaseAdapter {
 
             barcodeText = (TextView) itemView.findViewById(R.id.barcode_text);
             progress = (ProgressBar) itemView.findViewById(R.id.action_progress);
+        }
+    }
+
+    public static class BarcodeErrorViewHolder extends RecyclerView.ViewHolder {
+        public TextView errorMessage;
+
+        public BarcodeErrorViewHolder(View itemView) {
+            super(itemView);
+
+            errorMessage = (TextView) itemView.findViewById(android.R.id.text1);
+            errorMessage.setBackgroundColor(
+                    ContextCompat.getColor(itemView.getContext(), android.R.color.holo_red_dark)
+            );
         }
     }
 
@@ -86,8 +100,26 @@ public class BarcodeListItemAdapter extends BaseAdapter {
         String barcode = keys[position];
         List<Movie> movies = getItem(position);
 
-        Log.d("TEST", barcode + " " + movies.size());
-        if (movies.size() == 0) {
+        if (movies == null) {
+            BarcodeErrorViewHolder viewHolder;
+            if (convertView == null || convertView.getId() != R.id.movie_list_item) {
+                convertView = LayoutInflater.from(parent.getContext()).inflate(
+                        R.layout.movie_list_item,
+                        parent,
+                        false
+                );
+
+                viewHolder = new BarcodeErrorViewHolder(convertView);
+
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (BarcodeErrorViewHolder) convertView.getTag();
+            }
+
+            viewHolder.errorMessage.setText(
+                    convertView.getResources().getString(R.string.no_result_search_barcode)
+            );
+        } else if (movies.size() == 0) {
             BarcodeSearchViewHolder viewHolder;
             if (convertView == null) {
                 convertView = LayoutInflater.from(parent.getContext()).inflate(
