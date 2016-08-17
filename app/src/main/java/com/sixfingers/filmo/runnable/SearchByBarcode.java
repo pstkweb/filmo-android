@@ -84,9 +84,9 @@ public class SearchByBarcode extends AsyncTask<String, Void, ArrayList<Movie>> {
                         }
                     }
                 }
-
-                return result;
             }
+
+            return result;
         } catch (SQLException e) {
             // TODO : Handle exception
             Log.d("TEST", "SQLException " + e.getMessage());
@@ -101,7 +101,7 @@ public class SearchByBarcode extends AsyncTask<String, Void, ArrayList<Movie>> {
     @Override
     protected void onPostExecute(ArrayList<Movie> movies) {
         if (movies == null || movies.size() == 0) {
-            adapter.updateItem(barcode, new ArrayList<Movie>());
+            adapter.updateItem(barcode, null);
         } else {
             adapter.updateItem(barcode, movies);
         }

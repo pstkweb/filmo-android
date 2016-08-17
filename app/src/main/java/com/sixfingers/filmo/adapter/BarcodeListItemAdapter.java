@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class BarcodeListItemAdapter extends BaseAdapter {
-    private HashMap<String, List<Movie>> map;
-    private String[] keys;
+    private ArrayList<String> keys;
+    private ArrayList<List<Movie>> values;
 
     public static class BarcodeSearchViewHolder extends RecyclerView.ViewHolder {
         public TextView barcodeText;
@@ -44,7 +44,7 @@ public class BarcodeListItemAdapter extends BaseAdapter {
             super(itemView);
 
             errorMessage = (TextView) itemView.findViewById(android.R.id.text1);
-            errorMessage.setBackgroundColor(
+            errorMessage.setTextColor(
                     ContextCompat.getColor(itemView.getContext(), android.R.color.holo_red_dark)
             );
         }
@@ -57,14 +57,17 @@ public class BarcodeListItemAdapter extends BaseAdapter {
     }
 
     public BarcodeListItemAdapter(HashMap<String, List<Movie>> barcodes) {
-        map = barcodes;
-        keys = barcodes.keySet().toArray(new String[barcodes.size()]);
+        keys = new ArrayList<>();
+        keys.addAll(barcodes.keySet());
+
+        values = new ArrayList<>();
+        values.addAll(barcodes.values());
     }
 
     public boolean add(String text) {
-        if (!map.containsKey(text)) {
-            map.put(text, new ArrayList<Movie>());
-            keys = map.keySet().toArray(new String[map.size()]);
+        if (!keys.contains(text)) {
+            keys.add(text);
+            values.add(new ArrayList<Movie>());
 
             notifyDataSetChanged();
 
@@ -75,36 +78,38 @@ public class BarcodeListItemAdapter extends BaseAdapter {
     }
 
     public void updateItem(String barcode, List<Movie> movies) {
-        map.put(barcode, movies);
+        values.add(keys.indexOf(barcode), movies);
 
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return map.size();
+        return keys.size();
     }
 
     @Override
     public List<Movie> getItem(int i) {
-        return map.get(keys[i]);
+        return values.get(i);
     }
 
     @Override
     public long getItemId(int i) {
-        return keys[i].hashCode();
+        return keys.get(i).hashCode();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        String barcode = keys[position];
+        String barcode = keys.get(position);
         List<Movie> movies = getItem(position);
 
+        Log.d("TEST", "B: " + barcode);
+        // Error or no result
         if (movies == null) {
             BarcodeErrorViewHolder viewHolder;
-            if (convertView == null || convertView.getId() != R.id.movie_list_item) {
+            if (convertView == null || convertView.getId() != android.R.id.text1) {
                 convertView = LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.movie_list_item,
+                        android.R.layout.simple_list_item_1,
                         parent,
                         false
                 );
@@ -117,20 +122,32 @@ public class BarcodeListItemAdapter extends BaseAdapter {
             }
 
             viewHolder.errorMessage.setText(
-                    convertView.getResources().getString(R.string.no_result_search_barcode)
+                    String.format(
+                            convertView.getResources().getString(R.string.no_result_search_barcode),
+                            barcode
+                    )
             );
+        // Initial state after barcode scan
         } else if (movies.size() == 0) {
             BarcodeSearchViewHolder viewHolder;
-            if (convertView == null) {
+            if (convertView == null || convertView.getId() != R.id.barcode_searching) {
                 convertView = LayoutInflater.from(parent.getContext()).inflate(
                         R.layout.barcode_searching_list_item,
                         parent,
                         false
                 );
+
+                viewHolder = new BarcodeSearchViewHolder(convertView);
+
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (BarcodeSearchViewHolder) convertView.getTag();
             }
 
-            viewHolder = new BarcodeSearchViewHolder(convertView);
             viewHolder.barcodeText.setText(barcode);
+
+            Log.d("TEST", "view " + convertView.getClass() + " " + convertView.getId());
+        // When single result
         } else if (movies.size() == 1) {
             MoviesListItemAdapter.MovieItemViewHolder viewHolder;
             if (convertView == null || convertView.getId() != R.id.movie_list_item) {

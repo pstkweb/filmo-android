@@ -4,6 +4,9 @@ import com.sixfingers.filmo.dvdfrapi.models.Errors;
 import com.sixfingers.filmo.dvdfrapi.models.SearchResult;
 import com.sixfingers.filmo.dvdfrapi.models.SupportType;
 
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
+
 import java.io.IOException;
 
 import okhttp3.OkHttpClient;
@@ -11,7 +14,6 @@ import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class APIHandler {
     private DVDFrService service;
@@ -35,23 +37,17 @@ public class APIHandler {
 
     public SearchResult searchByGencode(String barcode, SupportType mediaType) throws IOException {
         Response<ResponseBody> response = service.searchByGencode(barcode, mediaType).execute();
-        SimpleXmlConverterFactory factory = SimpleXmlConverterFactory.create();
+        Serializer serializer = new Persister();
 
         try {
-            errors = (Errors) factory.responseBodyConverter(
-                    Errors.class,
-                    Errors.class.getAnnotations(),
-                    null
-            ).convert(response.body());
-
-            return null;
-        } catch (RuntimeException e) {
-            return (SearchResult) factory.responseBodyConverter(
-                    SearchResult.class,
-                    SearchResult.class.getAnnotations(),
-                    null
-            ).convert(response.body());
+            errors = serializer.read(Errors.class, response.body().string());
+        } catch (Exception e) {
+            try {
+                return serializer.read(SearchResult.class, response.body().string());
+            } catch (Exception ignored) { }
         }
+
+        return null;
     }
 
     public Errors getErrors() {

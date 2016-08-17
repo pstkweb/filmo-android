@@ -14,7 +14,7 @@ public class SearchResult {
     @Attribute(name = "generator")
     private String generator;
     @ElementList(entry = "dvd", inline = true, required = false, empty = true)
-    private List<DVDResult> dvds;
+    private List<DVDResult> dvds = new ArrayList<>();
 
     public SearchResult() {}
 
