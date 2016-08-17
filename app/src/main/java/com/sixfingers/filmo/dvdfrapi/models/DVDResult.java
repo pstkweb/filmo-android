@@ -11,7 +11,7 @@ import org.simpleframework.xml.Text;
 
 import java.util.List;
 
-@Root
+@Root(name = "dvd")
 public class DVDResult {
     @Element(name = "id")
     private int id;
