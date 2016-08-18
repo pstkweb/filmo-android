@@ -21,4 +21,7 @@ public interface DVDFrService {
             @Query("title") String title,
             @Query("produit") SupportType type
     );
+
+    @GET("dvd.php")
+    Call<ResponseBody> getCard(@Query("id") int id);
 }

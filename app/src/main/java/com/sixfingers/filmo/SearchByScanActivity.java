@@ -16,7 +16,7 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.sixfingers.filmo.adapter.BarcodeListItemAdapter;
 import com.sixfingers.filmo.dvdfrapi.models.SupportType;
 import com.sixfingers.filmo.model.Movie;
-import com.sixfingers.filmo.runnable.SearchByBarcode;
+import com.sixfingers.filmo.runnable.SearchByGencode;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -43,7 +43,7 @@ public class SearchByScanActivity extends AppCompatActivity {
                     if (simpleAdapter.add(barcode)) {
                         barcodeView.setStatusText(barcode);
 
-                        new SearchByBarcode(
+                        new SearchByGencode(
                                 (Activity) barcodeView.getContext(),
                                 simpleAdapter
                         ).execute(

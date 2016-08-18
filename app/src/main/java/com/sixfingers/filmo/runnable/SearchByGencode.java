@@ -24,13 +24,13 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class SearchByBarcode extends AsyncTask<String, Void, ArrayList<Movie>> {
+public class SearchByGencode extends AsyncTask<String, Void, ArrayList<Movie>> {
     private MoviesDatabaseHelper helper;
     private Activity context;
     private BarcodeListItemAdapter adapter;
     private String barcode;
 
-    public SearchByBarcode(Activity ctx, BarcodeListItemAdapter listAdapter) {
+    public SearchByGencode(Activity ctx, BarcodeListItemAdapter listAdapter) {
         context = ctx;
         adapter = listAdapter;
         helper = OpenHelperManager.getHelper(context, MoviesDatabaseHelper.class);

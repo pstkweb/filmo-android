@@ -1,9 +1,7 @@
 package com.sixfingers.filmo;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -69,7 +67,9 @@ public class MovieDetailFragment extends Fragment {
             }
 
             Activity activity = getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(
+                    R.id.toolbar_layout
+            );
             if (appBarLayout != null) {
                 appBarLayout.setTitle(movie != null ? movie.getTitre() : "");
             }
@@ -81,10 +81,11 @@ public class MovieDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.movie_detail, container, false);
 
-        // Show the content as text in a TextView.
         if (movie != null) {
-            ((TextView) rootView.findViewById(R.id.movie_synopsis)).setText(movie.getEditeur());
-            ((TextView) rootView.findViewById(R.id.movie_year)).setText(movie.getAnnee()+"");
+            ((TextView) rootView.findViewById(R.id.movie_synopsis)).setText(movie.getSynopsis());
+            ((TextView) rootView.findViewById(R.id.movie_year)).setText(
+                    String.valueOf(movie.getAnnee())
+            );
             ((TextView) rootView.findViewById(R.id.movie_edition)).setText(movie.getEdition());
 
             try {

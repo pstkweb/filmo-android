@@ -1,7 +1,9 @@
 package com.sixfingers.filmo.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sixfingers.filmo.MovieDetailActivity;
+import com.sixfingers.filmo.MovieDetailFragment;
 import com.sixfingers.filmo.R;
 import com.sixfingers.filmo.model.Movie;
 
@@ -43,6 +47,7 @@ public class MoviesListItemAdapter extends ArrayAdapter<Movie> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        final Movie movie = movies.get(position);
         MovieItemViewHolder viewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext()).inflate(
@@ -51,13 +56,27 @@ public class MoviesListItemAdapter extends ArrayAdapter<Movie> {
                     false
             );
 
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Context context = view.getContext();
+                    Intent intent = new Intent(context, MovieDetailActivity.class);
+                    intent.putExtra(
+                            MovieDetailFragment.ARG_MOVIE_ID,
+                            movie.getId()
+                    );
+
+                    context.startActivity(intent);
+                }
+            });
+
             viewHolder = new MovieItemViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (MovieItemViewHolder) convertView.getTag();
         }
 
-        Movie movie = movies.get(position);
         viewHolder.movieTitle.setText(movie.getTitre());
 
         String typeEdition = movie.getMedia();
