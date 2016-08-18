@@ -13,9 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-
 import com.sixfingers.filmo.R;
-import com.sixfingers.filmo.dvdfrapi.DVDFrService;
+import com.sixfingers.filmo.dvdfrapi.APIHandler;
 import com.sixfingers.filmo.dvdfrapi.models.DVDResult;
 import com.sixfingers.filmo.dvdfrapi.models.SearchResult;
 import com.sixfingers.filmo.dvdfrapi.models.SupportType;
@@ -29,9 +28,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import retrofit2.Retrofit;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class SearchByTitle extends AsyncTask<String, Void, ArrayList<Movie>> {
     private MoviesDatabaseHelper helper;
@@ -49,17 +45,14 @@ public class SearchByTitle extends AsyncTask<String, Void, ArrayList<Movie>> {
     @Override
     protected ArrayList<Movie> doInBackground(String... params) {
         ArrayList<Movie> result = new ArrayList<>();
-        /*DVDFrService service = new Retrofit.Builder()
-                .baseUrl(DVDFrService.ENDPOINT)
-                .addConverterFactory(SimpleXmlConverterFactory.create())
-                .build()
-                .create(DVDFrService.class);
 
         try {
-            SearchResult searchResult = service.searchByTitle(
+            APIHandler handler = new APIHandler();
+            SearchResult searchResult = handler.searchByTitle(
                     params[0],
                     SupportType.valueOf(params[1])
-            ).execute().body();
+            );
+            Log.d("TEST", params[0]);
 
             if (searchResult != null) {
                 if (searchResult.getDVDs() != null) {
@@ -106,7 +99,7 @@ public class SearchByTitle extends AsyncTask<String, Void, ArrayList<Movie>> {
         } catch (IOException e) {
             // TODO : Handle exception
             Log.d("TEST", "IOException on API request " + e.getMessage());
-        }*/
+        }
 
         return result;
     }

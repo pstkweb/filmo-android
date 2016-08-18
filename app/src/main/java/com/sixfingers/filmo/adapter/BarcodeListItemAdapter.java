@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -47,12 +48,6 @@ public class BarcodeListItemAdapter extends BaseAdapter {
             errorMessage.setTextColor(
                     ContextCompat.getColor(itemView.getContext(), android.R.color.holo_red_dark)
             );
-        }
-    }
-
-    public static class BarcodeFoundViewHolder extends RecyclerView.ViewHolder {
-        public BarcodeFoundViewHolder(View itemView) {
-            super(itemView);
         }
     }
 
@@ -183,7 +178,8 @@ public class BarcodeListItemAdapter extends BaseAdapter {
                         )
                 ));
             } catch (FileNotFoundException e) {
-                // TODO : default image
+                viewHolder.moviePoster.setImageResource(R.drawable.no_image);
+
                 e.printStackTrace();
             }
         }

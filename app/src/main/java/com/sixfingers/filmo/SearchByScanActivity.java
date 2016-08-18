@@ -5,7 +5,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.ListView;
 
@@ -44,8 +43,10 @@ public class SearchByScanActivity extends AppCompatActivity {
                     if (simpleAdapter.add(barcode)) {
                         barcodeView.setStatusText(barcode);
 
-                        Log.d("TEST", "Add barcode " + barcode);
-                        new SearchByBarcode((Activity) barcodeView.getContext(), simpleAdapter).execute(
+                        new SearchByBarcode(
+                                (Activity) barcodeView.getContext(),
+                                simpleAdapter
+                        ).execute(
                                 barcode,
                                 String.valueOf(SupportType.ALL)
                         );

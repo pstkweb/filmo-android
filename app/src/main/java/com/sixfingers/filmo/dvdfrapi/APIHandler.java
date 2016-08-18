@@ -1,7 +1,5 @@
 package com.sixfingers.filmo.dvdfrapi;
 
-import android.util.Log;
-
 import com.sixfingers.filmo.dvdfrapi.models.Errors;
 import com.sixfingers.filmo.dvdfrapi.models.SearchResult;
 import com.sixfingers.filmo.dvdfrapi.models.SupportType;
@@ -46,12 +44,27 @@ public class APIHandler {
             try {
                 errors = serializer.read(Errors.class, xml);
             } catch (Exception e) {
-                Log.d("TEST", e.getMessage());
                 try {
                     return serializer.read(SearchResult.class, xml);
-                } catch (Exception ignored) {
-                    Log.d("TEST", ignored.getMessage());
-                }
+                } catch (Exception ignored) { }
+            }
+        }
+
+        return null;
+    }
+
+    public SearchResult searchByTitle(String title, SupportType mediaType) throws IOException {
+        Response<ResponseBody> response = service.searchByTitle(title, mediaType).execute();
+        Serializer serializer = new Persister();
+
+        if (response.isSuccessful()) {
+            String xml = response.body().string();
+            try {
+                errors = serializer.read(Errors.class, xml);
+            } catch (Exception e) {
+                try {
+                    return serializer.read(SearchResult.class, xml);
+                } catch (Exception ignored) { }
             }
         }
 

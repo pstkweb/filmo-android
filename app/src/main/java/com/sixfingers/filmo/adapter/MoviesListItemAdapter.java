@@ -76,7 +76,8 @@ public class MoviesListItemAdapter extends ArrayAdapter<Movie> {
                     )
             ));
         } catch (FileNotFoundException e) {
-            // TODO : default image
+            viewHolder.moviePoster.setImageResource(R.drawable.no_image);
+
             e.printStackTrace();
         }
 

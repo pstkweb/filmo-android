@@ -87,7 +87,8 @@ public class MovieDetailFragment extends Fragment {
             ((TextView) rootView.findViewById(R.id.movie_year)).setText(movie.getAnnee()+"");
             ((TextView) rootView.findViewById(R.id.movie_edition)).setText(movie.getEdition());
 
-            try {((ImageView) rootView.findViewById(R.id.movie_poster)).setImageBitmap(
+            try {
+                ((ImageView) rootView.findViewById(R.id.movie_poster)).setImageBitmap(
                     BitmapFactory.decodeStream(
                         new FileInputStream(
                                 new File(
@@ -98,7 +99,10 @@ public class MovieDetailFragment extends Fragment {
                     )
                 );
             } catch (FileNotFoundException e) {
-                // TODO : default image
+                ((ImageView) rootView.findViewById(R.id.movie_poster)).setImageResource(
+                        R.drawable.no_image
+                );
+
                 e.printStackTrace();
             }
         }
