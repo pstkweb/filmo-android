@@ -12,6 +12,10 @@ public class Movie {
     public final static String ANNEE = "annee";
     public final static String EDITEUR = "editeur";
     public final static String EDITION = "edition";
+    public final static String DISTRIBUTEUR = "distributeur";
+    public final static String STUDIO = "studio";
+    public final static String DUREE = "duree";
+    public final static String SYNOPSIS = "synopsis";
 
     @DatabaseField(id = true, columnName = ID)
     private Long id;
@@ -33,6 +37,14 @@ public class Movie {
     private String editeur;
     @DatabaseField(columnName = EDITION)
     private String edition;
+    @DatabaseField(columnName = DISTRIBUTEUR)
+    private String distributeur;
+    @DatabaseField(columnName = STUDIO)
+    private String studio;
+    @DatabaseField(columnName = DUREE)
+    private int duree;
+    @DatabaseField(columnName = SYNOPSIS)
+    private String synopsis;
 
     public Movie() {}
 
@@ -140,6 +152,38 @@ public class Movie {
 
     public void setEdition(String edition) {
         this.edition = edition;
+    }
+
+    public String getDistributeur() {
+        return distributeur;
+    }
+
+    public void setDistributeur(String distributeur) {
+        this.distributeur = distributeur;
+    }
+
+    public String getStudio() {
+        return studio;
+    }
+
+    public void setStudio(String studio) {
+        this.studio = studio;
+    }
+
+    public int getDuree() {
+        return duree;
+    }
+
+    public void setDuree(int duree) {
+        this.duree = duree;
+    }
+
+    public String getSynopsis() {
+        return synopsis;
+    }
+
+    public void setSynopsis(String synopsis) {
+        this.synopsis = synopsis;
     }
 
     @Override

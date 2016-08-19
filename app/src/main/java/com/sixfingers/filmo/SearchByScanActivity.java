@@ -93,7 +93,7 @@ public class SearchByScanActivity extends AppCompatActivity {
         ListView list = (ListView) findViewById(R.id.scanned_list);
         list.setEmptyView(findViewById(android.R.id.empty));
 
-        simpleAdapter = new BarcodeListItemAdapter(new HashMap<String, List<Movie>>());
+        simpleAdapter = new BarcodeListItemAdapter(new HashMap<String, List<Movie>>(), this);
         list.setAdapter(simpleAdapter);
     }
 

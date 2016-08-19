@@ -2,6 +2,7 @@ package com.sixfingers.filmo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +19,23 @@ import android.view.MenuItem;
  * in a {@link MovieListActivity}.
  */
 public class MovieDetailActivity extends AppCompatActivity {
+
+    private Intent getParentActivity() {
+        String className = getIntent().getExtras().getString(
+                MovieDetailFragment.ARG_BACK_ACTIVITY,
+                MovieListActivity.class.getCanonicalName()
+        );
+
+        Intent i;
+        try {
+            i = new Intent(this, Class.forName(className));
+        } catch (ClassNotFoundException e) {
+            i = new Intent(this, MovieListActivity.class);
+        }
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        return i;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +77,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            NavUtils.navigateUpTo(this, new Intent(this, MovieListActivity.class));
+            NavUtils.navigateUpTo(this, getParentActivity());
 
             return true;
         }

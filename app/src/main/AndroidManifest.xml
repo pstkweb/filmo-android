@@ -4,6 +4,7 @@
     package="com.sixfingers.filmo">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -25,9 +26,6 @@
             android:name=".MovieDetailActivity"
             android:label="@string/title_movie_detail"
             android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sixfingers.filmo.MovieListActivity" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sixfingers.filmo.MovieListActivity" />

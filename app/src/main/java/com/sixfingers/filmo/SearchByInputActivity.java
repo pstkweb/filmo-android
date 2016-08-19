@@ -36,7 +36,13 @@ public class SearchByInputActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ListView listView = (ListView) findViewById(android.R.id.list);
-        listView.setAdapter(new MoviesListItemAdapter(this, new ArrayList<Movie>()));
+        listView.setAdapter(
+                new MoviesListItemAdapter(
+                        this,
+                        new ArrayList<Movie>(),
+                        getClass().getCanonicalName()
+                )
+        );
         listView.setEmptyView(findViewById(android.R.id.empty));
 
         intent = getIntent();

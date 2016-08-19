@@ -1,18 +1,18 @@
 package com.sixfingers.filmo.adapter;
 
+import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.sixfingers.filmo.R;
+import com.sixfingers.filmo.SearchByScanActivity;
 import com.sixfingers.filmo.model.Movie;
 
 import java.io.File;
@@ -51,7 +51,7 @@ public class BarcodeListItemAdapter extends BaseAdapter {
         }
     }
 
-    public BarcodeListItemAdapter(HashMap<String, List<Movie>> barcodes) {
+    public BarcodeListItemAdapter(HashMap<String, List<Movie>> barcodes, Activity parent) {
         keys = new ArrayList<>();
         keys.addAll(barcodes.keySet());
 
@@ -98,7 +98,6 @@ public class BarcodeListItemAdapter extends BaseAdapter {
         String barcode = keys.get(position);
         List<Movie> movies = getItem(position);
 
-        Log.d("TEST", "B: " + barcode);
         // Error or no result
         if (movies == null) {
             BarcodeErrorViewHolder viewHolder;
@@ -140,8 +139,6 @@ public class BarcodeListItemAdapter extends BaseAdapter {
             }
 
             viewHolder.barcodeText.setText(barcode);
-
-            Log.d("TEST", "view " + convertView.getClass() + " " + convertView.getId());
         // When single result
         } else if (movies.size() == 1) {
             MoviesListItemAdapter.MovieItemViewHolder viewHolder;
@@ -152,7 +149,11 @@ public class BarcodeListItemAdapter extends BaseAdapter {
                         false
                 );
 
-                viewHolder = new MoviesListItemAdapter.MovieItemViewHolder(convertView);
+                viewHolder = new MoviesListItemAdapter.MovieItemViewHolder(
+                        convertView,
+                        movies.get(0),
+                        SearchByScanActivity.class.getCanonicalName()
+                );
 
                 convertView.setTag(viewHolder);
             } else {

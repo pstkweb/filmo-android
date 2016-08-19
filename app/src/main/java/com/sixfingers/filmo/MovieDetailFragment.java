@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +32,7 @@ public class MovieDetailFragment extends Fragment {
      * represents.
      */
     public static final String ARG_MOVIE_ID = "movie_id";
+    public static final String ARG_BACK_ACTIVITY = "back_home";
 
     private MoviesDatabaseHelper helper;
     private Movie movie;
@@ -61,7 +61,6 @@ public class MovieDetailFragment extends Fragment {
             // to load content from a content provider.
             try {
                 movie = getHelper().getMovieDao().queryForId(getArguments().getLong(ARG_MOVIE_ID));
-                Log.d("TEST", movie.getTitre());
             } catch (SQLException e) {
                 e.printStackTrace();
             }

@@ -3,7 +3,6 @@ package com.sixfingers.filmo.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,30 +23,47 @@ import java.util.ArrayList;
 
 public class MoviesListItemAdapter extends ArrayAdapter<Movie> {
     private ArrayList<Movie> movies;
+    private String className;
 
     public static class MovieItemViewHolder extends RecyclerView.ViewHolder {
         public TextView movieTitle;
         public TextView movieTypeAndEdition;
         public ImageView moviePoster;
 
-        public MovieItemViewHolder(View itemView) {
+        public MovieItemViewHolder(View itemView, final Movie movie, final String className) {
             super(itemView);
 
             movieTitle = (TextView) itemView.findViewById(R.id.movie_title);
             movieTypeAndEdition = (TextView) itemView.findViewById(R.id.movie_type_edition);
             moviePoster = (ImageView) itemView.findViewById(R.id.movie_poster);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Context context = view.getContext();
+                    Intent intent = new Intent(context, MovieDetailActivity.class);
+                    intent.putExtra(
+                            MovieDetailFragment.ARG_MOVIE_ID,
+                            movie.getId()
+                    );
+                    intent.putExtra(MovieDetailFragment.ARG_BACK_ACTIVITY, className);
+
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 
-    public MoviesListItemAdapter(Context context, ArrayList<Movie> movies) {
+    public MoviesListItemAdapter(Context context, ArrayList<Movie> movies, String className) {
         super(context, R.layout.movie_list_item, movies);
 
         this.movies = movies;
+        this.className = className;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final Movie movie = movies.get(position);
+        Movie movie = movies.get(position);
         MovieItemViewHolder viewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext()).inflate(
@@ -56,22 +72,7 @@ public class MoviesListItemAdapter extends ArrayAdapter<Movie> {
                     false
             );
 
-            convertView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    Context context = view.getContext();
-                    Intent intent = new Intent(context, MovieDetailActivity.class);
-                    intent.putExtra(
-                            MovieDetailFragment.ARG_MOVIE_ID,
-                            movie.getId()
-                    );
-
-                    context.startActivity(intent);
-                }
-            });
-
-            viewHolder = new MovieItemViewHolder(convertView);
+            viewHolder = new MovieItemViewHolder(convertView, movie, className);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (MovieItemViewHolder) convertView.getTag();
