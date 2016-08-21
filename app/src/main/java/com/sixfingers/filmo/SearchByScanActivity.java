@@ -63,7 +63,7 @@ public class SearchByScanActivity extends AppCompatActivity {
                 } else {
                     Snackbar.make(
                             findViewById(android.R.id.content),
-                            getResources().getString(R.string.wrong_format),
+                            R.string.wrong_format,
                             Snackbar.LENGTH_LONG
                     ).show();
                 }

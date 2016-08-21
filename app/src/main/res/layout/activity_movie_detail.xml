@@ -41,14 +41,38 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+    <com.sixfingers.ui.floatingactionmenu.FloatingActionMenu
+        android:id="@+id/FAM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|start"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_add_white_48dp"
         app:layout_anchor="@+id/movie_detail_container"
-        app:layout_anchorGravity="top|end" />
+        app:layout_anchorGravity="top|end"
+        app:main_icon="@drawable/ic_add_white_48dp"
+        app:direction="start"
+        app:hide_anim="@anim/fab_header_close"
+        app:show_anim="@anim/fab_header_open"
+        app:layout_behavior="com.sixfingers.ui.floatingactionmenu.FloatingActionMenu$ScrollAwareFAMBehavior"
+        app:top_offset="16dp">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_menu_collected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_video_library_white_48dp"
+            android:onClick="addMovieToCollected"
+            android:clickable="true"
+            app:backgroundTint="@color/colorAccent" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_menu_wish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_favorite_border_white_48dp"
+            android:onClick="addMovieToWishes"
+            android:clickable="true"
+            app:backgroundTint="@color/colorAccent" />
+
+    </com.sixfingers.ui.floatingactionmenu.FloatingActionMenu>
 
 </android.support.design.widget.CoordinatorLayout>

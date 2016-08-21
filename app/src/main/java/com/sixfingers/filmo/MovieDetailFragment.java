@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.sixfingers.filmo.helper.MoviesDatabaseHelper;
 import com.sixfingers.filmo.model.Movie;
+import com.sixfingers.filmo.ormlite.QueriesRepository;
 
 import java.io.File;
 import java.io.FileInputStream;

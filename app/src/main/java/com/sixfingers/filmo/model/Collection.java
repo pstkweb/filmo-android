@@ -13,7 +13,10 @@ public class Collection {
     @DatabaseField(unique = true, columnName = NAME)
     private String name;
 
+    public static final String WISHES = "Wishes";
     public static final String COLLECTED = "Collected";
+
+    public static final String[] DEFAULT_COLLECTIONS = new String[]{ COLLECTED, WISHES };
 
     public Collection() {}
 

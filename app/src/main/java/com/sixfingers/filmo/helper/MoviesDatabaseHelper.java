@@ -59,8 +59,10 @@ public class MoviesDatabaseHelper extends OrmLiteSqliteOpenHelper {
                 TableUtils.createTable(connectionSource, c);
             }
 
-            Collection collected = new Collection(Collection.COLLECTED);
-            getCollectionDao().create(collected);
+            for (String name : Collection.DEFAULT_COLLECTIONS) {
+                Collection collected = new Collection(name);
+                getCollectionDao().create(collected);
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
